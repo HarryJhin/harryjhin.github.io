@@ -1,0 +1,44 @@
+import { defineAstroPaperConfig } from "./src/types/config";
+
+export default defineAstroPaperConfig({
+  site: {
+    url: "https://harryjhin.github.io/",
+    title: "The JVM Index",
+    description:
+      "Cloud-native, seen from the JVM — notes on Spring, Kotlin, and the path to Kubernetes.",
+    author: "주진현",
+    profile: "https://github.com/HarryJhin",
+    ogImage: "default-og.jpg",
+    lang: "ko",
+    timezone: "Asia/Seoul",
+    dir: "ltr",
+  },
+  posts: {
+    perPage: 6,
+    perIndex: 5,
+    scheduledPostMargin: 15 * 60 * 1000,
+  },
+  features: {
+    lightAndDarkMode: true,
+    dynamicOgImage: true,
+    showArchives: true,
+    showBackButton: true,
+    editPost: {
+      enabled: true,
+      url: "https://github.com/HarryJhin/harryjhin.github.io/edit/main/",
+    },
+    search: "pagefind",
+  },
+  socials: [
+    { name: "github", url: "https://github.com/HarryJhin" },
+    { name: "linkedin", url: "https://www.linkedin.com/in/harryjhin" },
+    { name: "medium", url: "https://joojinhyun.medium.com" },
+    { name: "mail", url: "mailto:joojinhyun00@gmail.com" },
+  ],
+  shareLinks: [
+    { name: "x", url: "https://x.com/intent/post?url=" },
+    { name: "telegram", url: "https://t.me/share/url?url=" },
+    { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
+    { name: "mail", url: "mailto:?subject=See%20this%20post&body=" },
+  ],
+});
