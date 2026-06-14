@@ -15,25 +15,25 @@
   --font-headline: var(--font-newsreader), Georgia, serif;
 }
 
-/* Light theme values */
+/* Light theme values — neutrals tinted toward the cool brand hue (~250) */
 :root,
 [data-theme="light"] {
-  --background: #fdfdfd;
-  --foreground: #282728;
-  --accent: #006cac;
-  --accent-foreground: #ffffff;
-  --muted: #e6e6e6;
-  --muted-foreground: #6b7280;
-  --border: #ece9e9;
+  --background: oklch(99.4% 0.003 250);
+  --foreground: oklch(27.4% 0.004 264);
+  --accent: oklch(51.4% 0.13 245);
+  --accent-foreground: oklch(99% 0.004 250);
+  --muted: oklch(92.5% 0.004 250);
+  --muted-foreground: oklch(55.1% 0.023 264);
+  --border: oklch(93.6% 0.004 250);
 }
 
 /* Dark theme values — "night edition": warm amber accent, neutral slate rules */
 [data-theme="dark"] {
-  --background: #212737;
-  --foreground: #eaedf3;
-  --accent: #e8995c;
-  --accent-foreground: #221504;
-  --muted: #343f60;
-  --muted-foreground: #afb9ca;
-  --border: #39425b;
+  --background: oklch(27.4% 0.031 268);
+  --foreground: oklch(94.6% 0.009 264);
+  --accent: oklch(75% 0.122 57);
+  --accent-foreground: oklch(20.8% 0.037 73);
+  --muted: oklch(37.3% 0.059 269);
+  --muted-foreground: oklch(78.3% 0.027 261);
+  --border: oklch(38.2% 0.045 269);
 }
