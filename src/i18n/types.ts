@@ -6,6 +6,7 @@ export interface UIStrings {
     about: string;
     archives: string;
     search: string;
+    series: string;
   };
   post: {
     publishedAt: string;
@@ -50,6 +51,19 @@ export interface UIStrings {
 
     searchTitle: string;
     searchDesc: string;
+
+    seriesTitle: string;
+    seriesDesc: string;
+    seriesItemTitle: string;
+    seriesItemDesc: string;
+  };
+  series: {
+    /** "{{title}} {{total}}부작 중 {{order}}번째" */
+    partOf: string;
+    viewAll: string;
+    /** "{{count}}편" */
+    postCount: string;
+    contents: string;
   };
   a11y: {
     skipToContent: string;

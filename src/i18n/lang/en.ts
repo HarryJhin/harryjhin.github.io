@@ -8,6 +8,7 @@ export default {
     about: "About",
     archives: "Archives",
     search: "Search",
+    series: "Series",
   },
   post: {
     publishedAt: "Published at",
@@ -52,6 +53,17 @@ export default {
 
     searchTitle: "Search",
     searchDesc: "Search any article ...",
+
+    seriesTitle: "Series",
+    seriesDesc: "Collections of posts grouped into an ordered series.",
+    seriesItemTitle: "Series",
+    seriesItemDesc: "All posts in the series",
+  },
+  series: {
+    partOf: "This is part {{order}} of {{total}} in 《{{title}}》.",
+    viewAll: "View the whole series",
+    postCount: "{{count}} posts",
+    contents: "Series contents",
   },
   a11y: {
     skipToContent: "Skip to content",
