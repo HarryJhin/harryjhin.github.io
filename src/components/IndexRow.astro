@@ -1,5 +1,6 @@
 ---
 import { getPostUrl } from "@/utils/getPostPaths";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import config from "@/config";
 
 interface Props {
@@ -8,11 +9,17 @@ interface Props {
   filePath?: string;
   title: string;
   pubDatetime: Date;
+  series?: { id: string; title: string; order: number; total: number };
 }
-const { num, id, filePath, title, pubDatetime } = Astro.props;
+const { num, id, filePath, title, pubDatetime, series } = Astro.props;
 
 // getPostUrl already applies locale routing + base prefix.
 const href = getPostUrl(id, filePath);
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const seriesHref = series
+  ? getRelativeLocaleUrl(locale, `series/${series.id}/`)
+  : undefined;
 
 const mmdd = new Intl.DateTimeFormat("en-CA", {
   month: "2-digit",
@@ -21,15 +28,28 @@ const mmdd = new Intl.DateTimeFormat("en-CA", {
 }).format(pubDatetime);
 ---
 
-<a
-  href={href}
-  class="border-border/40 hover:text-accent group flex items-baseline gap-3 border-b py-1.5 no-underline"
->
+<div class="border-border/40 group flex items-baseline gap-3 border-b py-1.5">
   <span class="text-muted-foreground w-6 shrink-0 text-sm tabular-nums">
     {num.toString().padStart(2, "0")}
   </span>
-  <span class="group-hover:decoration-accent flex-1 text-sm decoration-dashed group-hover:underline group-hover:underline-offset-4">
-    {title}
+  <span class="flex-1 text-sm">
+    <a
+      href={href}
+      class="hover:text-accent decoration-dashed underline-offset-4 hover:underline"
+    >
+      {title}
+    </a>
+    {
+      series && (
+        <a
+          href={seriesHref}
+          class="text-accent/80 hover:text-accent ms-1 align-middle text-xs whitespace-nowrap no-underline"
+          title={series.title}
+        >
+          ◆ {series.title} {series.order}/{series.total}
+        </a>
+      )
+    }
   </span>
   <span class="text-muted-foreground shrink-0 text-xs tabular-nums">{mmdd}</span>
-</a>
+</div>
