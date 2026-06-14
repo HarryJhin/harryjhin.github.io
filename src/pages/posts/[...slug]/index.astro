@@ -14,6 +14,8 @@ import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
 import BackToTopButton from "./_components/BackToTopButton.astro";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
+import SeriesNav from "@/components/SeriesNav.astro";
+import { getSeriesContext } from "@/utils/getSeries";
 import config from "@/config";
 
 export async function getStaticPaths() {
@@ -74,6 +76,9 @@ const {
 } = post.data;
 
 const { Content } = await render(post);
+
+const allPosts = await getCollection("posts");
+const seriesContext = getSeriesContext(post, allPosts);
 
 let ogImageUrl: string | undefined;
 
@@ -153,6 +158,8 @@ const ogImage = ogImageUrl
     >
       <Content />
     </article>
+
+    {seriesContext && <SeriesNav context={seriesContext} />}
 
     <hr class="my-8 border-dashed" />
 
