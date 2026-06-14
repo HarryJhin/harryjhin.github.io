@@ -133,7 +133,7 @@ const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
     </script>
 
     {
-      site.googleAnalyticsId && (
+      import.meta.env.PROD && site.googleAnalyticsId && (
         <script is:inline define:vars={{ gaId: site.googleAnalyticsId }}>
           {/* GA4 with Astro ClientRouter (View Transitions): initialise once,
              disable the automatic page_view, and emit one per astro:page-load
