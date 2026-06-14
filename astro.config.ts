@@ -19,6 +19,22 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import config from "./astro-paper.config";
 
+// Mark markdown content images as lazy/async so off-screen figures don't
+// block the initial render. Skips images that already set the attributes.
+function rehypeImageLoading() {
+  return (tree: unknown) => {
+    const walk = (node: any) => {
+      if (node?.type === "element" && node.tagName === "img") {
+        node.properties ??= {};
+        node.properties.loading ??= "lazy";
+        node.properties.decoding ??= "async";
+      }
+      node?.children?.forEach(walk);
+    };
+    walk(tree);
+  };
+}
+
 export default defineConfig({
   site: config.site.url,
   integrations: [
@@ -41,7 +57,7 @@ export default defineConfig({
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
-      rehypePlugins: [rehypeCallouts],
+      rehypePlugins: [rehypeCallouts, rehypeImageLoading],
     }),
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },
