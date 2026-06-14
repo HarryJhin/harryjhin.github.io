@@ -1,0 +1,35 @@
+---
+import { getPostUrl } from "@/utils/getPostPaths";
+import config from "@/config";
+
+interface Props {
+  num: number;
+  id: string;
+  filePath?: string;
+  title: string;
+  pubDatetime: Date;
+}
+const { num, id, filePath, title, pubDatetime } = Astro.props;
+
+// getPostUrl already applies locale routing + base prefix.
+const href = getPostUrl(id, filePath);
+
+const mmdd = new Intl.DateTimeFormat("en-CA", {
+  month: "2-digit",
+  day: "2-digit",
+  timeZone: config.site.timezone,
+}).format(pubDatetime);
+---
+
+<a
+  href={href}
+  class="border-border/40 hover:text-accent group flex items-baseline gap-3 border-b py-1.5 no-underline"
+>
+  <span class="text-muted-foreground w-6 shrink-0 text-sm tabular-nums">
+    {num.toString().padStart(2, "0")}
+  </span>
+  <span class="group-hover:decoration-accent flex-1 text-sm decoration-dashed group-hover:underline group-hover:underline-offset-4">
+    {title}
+  </span>
+  <span class="text-muted-foreground shrink-0 text-xs tabular-nums">{mmdd}</span>
+</a>
