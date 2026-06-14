@@ -8,6 +8,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --font-app: var(--font-google-sans-code);
+  --font-headline: var(--font-newsreader), var(--font-noto-serif-kr), Georgia,
+    serif;
 }
 
 /* Light theme values */

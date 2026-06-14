@@ -68,6 +68,24 @@ export default defineConfig({
       styles: ["normal", "italic"],
       formats: ["woff", "ttf"],
     },
+    {
+      name: "Newsreader",
+      cssVariable: "--font-newsreader",
+      provider: fontProviders.google(),
+      fallbacks: ["Georgia", "serif"],
+      weights: [600, 800],
+      styles: ["normal", "italic"],
+      formats: ["woff", "ttf"],
+    },
+    {
+      name: "Noto Serif KR",
+      cssVariable: "--font-noto-serif-kr",
+      provider: fontProviders.google(),
+      fallbacks: ["serif"],
+      weights: [600, 800],
+      styles: ["normal"],
+      formats: ["woff", "ttf"],
+    },
   ],
   env: {
     schema: {
