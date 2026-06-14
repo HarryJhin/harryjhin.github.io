@@ -31,3 +31,6 @@ public/pagefind
 
 # docker compose
 compose.override.yaml
+
+# brainstorming visual companion
+.superpowers/
