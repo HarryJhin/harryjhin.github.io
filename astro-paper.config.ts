@@ -41,4 +41,10 @@ export default defineAstroPaperConfig({
     { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
     { name: "mail", url: "mailto:?subject=See%20this%20post&body=" },
   ],
+  sections: [
+    { id: "spring", label: "spring" },
+    { id: "kotlin", label: "kotlin" },
+    { id: "jvm", label: "jvm" },
+    { id: "cloud-native", label: "cloud-native" },
+  ],
 });

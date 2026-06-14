@@ -21,6 +21,7 @@ const posts = defineCollection({
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
       timezone: z.string().optional(),
+      section: z.string().optional(),
       /** Optional Q&A pairs emitted as schema.org FAQPage for answer engines. */
       faq: z
         .array(z.object({ question: z.string(), answer: z.string() }))

@@ -36,6 +36,12 @@ const config: ResolvedAstroPaperConfig = {
   },
   socials: userConfig.socials ?? [],
   shareLinks: userConfig.shareLinks ?? [],
+  sections: userConfig.sections ?? [
+    { id: "spring", label: "spring" },
+    { id: "kotlin", label: "kotlin" },
+    { id: "jvm", label: "jvm" },
+    { id: "cloud-native", label: "cloud-native" },
+  ],
 };
 
 export default config;

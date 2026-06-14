@@ -94,6 +94,13 @@ interface ShareLink {
   linkTitle?: string;
 }
 
+interface SectionConfig {
+  /** Stable id — matches a post's frontmatter `section` value */
+  id: string;
+  /** Display label rendered as "## {label}" on the home index */
+  label: string;
+}
+
 interface AstroPaperConfig {
   site: SiteConfig;
   posts?: PostsConfig;
@@ -102,6 +109,8 @@ interface AstroPaperConfig {
   socials?: SocialLink[];
   /** Share links shown on post detail pages */
   shareLinks?: ShareLink[];
+  /** Fixed home-index sections, in display order */
+  sections?: SectionConfig[];
 }
 
 type ResolvedSiteConfig = Required<
@@ -125,6 +134,7 @@ export interface ResolvedAstroPaperConfig {
   features: Required<FeaturesConfig>;
   socials: SocialLink[];
   shareLinks: ShareLink[];
+  sections: SectionConfig[];
 }
 
 /**
