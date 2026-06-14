@@ -40,6 +40,11 @@ jobs:
 
       - name: Build (Astro + Pagefind 검색 인덱싱)
         run: pnpm run build
+        env:
+          # GitHub repo Variables(Settings → Secrets and variables → Actions → Variables)에 설정.
+          # 비어 있으면 해당 기능(GSC meta / GA 스크립트)은 빌드에서 생략됨.
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -21,6 +21,8 @@ interface SiteConfig {
   dir?: "ltr" | "rtl" | "auto";
   /** Google Search Console verification meta tag value */
   googleVerification?: string;
+  /** Google Analytics 4 measurement ID, e.g. "G-XXXXXXXXXX" */
+  googleAnalyticsId?: string;
 }
 
 interface PostsConfig {
@@ -126,7 +128,10 @@ type ResolvedSiteConfig = Required<
     | "ogImage"
   >
 > &
-  Pick<SiteConfig, "profile" | "googleVerification" | "twitterHandle">;
+  Pick<
+    SiteConfig,
+    "profile" | "googleVerification" | "twitterHandle" | "googleAnalyticsId"
+  >;
 
 export interface ResolvedAstroPaperConfig {
   site: ResolvedSiteConfig;

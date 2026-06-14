@@ -132,6 +132,36 @@ const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
       })();
     </script>
 
+    {
+      site.googleAnalyticsId && (
+        <script is:inline define:vars={{ gaId: site.googleAnalyticsId }}>
+          {/* GA4 with Astro ClientRouter (View Transitions): initialise once,
+             disable the automatic page_view, and emit one per astro:page-load
+             so client-side navigations are tracked without double-counting. */}
+          if (!window.__gaInit) {
+            window.__gaInit = true;
+            var s = document.createElement("script");
+            s.async = true;
+            s.src = "https://www.googletagmanager.com/gtag/js?id=" + gaId;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () {
+              window.dataLayer.push(arguments);
+            };
+            window.gtag("js", new Date());
+            window.gtag("config", gaId, { send_page_view: false });
+            document.addEventListener("astro:page-load", function () {
+              window.gtag("event", "page_view", {
+                page_title: document.title,
+                page_location: location.href,
+                page_path: location.pathname + location.search,
+              });
+            });
+          }
+        </script>
+      )
+    }
+
     <ClientRouter />
   </head>
   <body
