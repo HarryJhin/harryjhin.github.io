@@ -22,6 +22,13 @@ const posts = defineCollection({
       hideEditPost: z.boolean().optional(),
       timezone: z.string().optional(),
       section: z.string().optional(),
+      /** Ordered-series membership. `slug` matches a `config.series` id. */
+      series: z
+        .object({
+          slug: z.string(),
+          order: z.number(),
+        })
+        .optional(),
       /** Optional Q&A pairs emitted as schema.org FAQPage for answer engines. */
       faq: z
         .array(z.object({ question: z.string(), answer: z.string() }))

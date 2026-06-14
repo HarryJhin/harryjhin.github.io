@@ -49,4 +49,12 @@ export default defineAstroPaperConfig({
     { id: "jvm", label: "jvm" },
     { id: "cloud-native", label: "cloud-native" },
   ],
+  series: [
+    {
+      id: "spring-web-boot4",
+      title: "Spring Web 다시 읽기",
+      description:
+        "Spring Boot 4·Framework 7의 Web 변경점을 표준 관점에서 따라가는 7부작.",
+    },
+  ],
 });

@@ -43,6 +43,7 @@ const config: ResolvedAstroPaperConfig = {
     { id: "jvm", label: "jvm" },
     { id: "cloud-native", label: "cloud-native" },
   ],
+  series: userConfig.series ?? [],
 };
 
 export default config;

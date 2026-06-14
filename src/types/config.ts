@@ -103,6 +103,15 @@ interface SectionConfig {
   label: string;
 }
 
+interface SeriesConfig {
+  /** Stable id — matches a post's frontmatter `series.slug` value */
+  id: string;
+  /** Display title of the series, e.g. "Spring Web 다시 읽기" */
+  title: string;
+  /** Optional one-line description shown on series pages */
+  description?: string;
+}
+
 interface AstroPaperConfig {
   site: SiteConfig;
   posts?: PostsConfig;
@@ -113,6 +122,8 @@ interface AstroPaperConfig {
   shareLinks?: ShareLink[];
   /** Fixed home-index sections, in display order */
   sections?: SectionConfig[];
+  /** Curated ordered series, in display order */
+  series?: SeriesConfig[];
 }
 
 type ResolvedSiteConfig = Required<
@@ -140,6 +151,7 @@ export interface ResolvedAstroPaperConfig {
   socials: SocialLink[];
   shareLinks: ShareLink[];
   sections: SectionConfig[];
+  series: SeriesConfig[];
 }
 
 /**
