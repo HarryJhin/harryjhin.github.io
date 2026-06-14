@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import IndexRow from "@/components/IndexRow.astro";
+import { getSeriesList, getSeriesById } from "@/utils/getSeries";
+import config from "@/config";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return getSeriesList(posts).map(group => ({
+    params: { series: group.id },
+    props: { id: group.id },
+  }));
+}
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+
+const posts = await getCollection("posts");
+const group = getSeriesById(posts, id)!;
+
+
+---
+
+<Layout
+  title={`${group.title} | ${config.site.title}`}
+  description={group.description ?? group.title}
+>
+  <Header />
+
+  <Breadcrumb />
+
+  <Main pageTitle={group.title} pageDesc={group.description}>
+    <div class="flex flex-col">
+      {
+        group.posts.map((post, i) => (
+          <IndexRow
+            num={i + 1}
+            id={post.id}
+            filePath={post.filePath}
+            title={post.data.title}
+            pubDatetime={post.data.pubDatetime}
+          />
+        ))
+      }
+    </div>
+  </Main>
+
+  <Footer />
+</Layout>
