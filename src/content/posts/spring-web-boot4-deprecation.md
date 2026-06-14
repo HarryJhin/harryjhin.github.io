@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-17T09:00:00+09:00
+pubDatetime: 2026-02-28T09:00:00+09:00
 title: "Spring Boot 4 API Deprecation: RFC 9745 Deprecation·Sunset 헤더 (Spring Web 다시 읽기 4)"
 section: spring
 tags:

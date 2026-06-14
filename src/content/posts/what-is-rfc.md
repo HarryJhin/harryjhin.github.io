@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-14T13:00:00+09:00
+pubDatetime: 2026-01-02T09:00:00+09:00
 title: "RFC란 무엇인가: 인터넷이 합의에 도달하는 방법"
 featured: false
 section: web

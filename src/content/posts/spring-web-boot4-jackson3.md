@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-15T09:00:00+09:00
+pubDatetime: 2026-01-21T09:00:00+09:00
 title: "Spring Boot 4 Jackson 3 마이그레이션: 직렬화 엔진이 바뀐 자리 (Spring Web 다시 읽기 2)"
 section: spring
 tags:

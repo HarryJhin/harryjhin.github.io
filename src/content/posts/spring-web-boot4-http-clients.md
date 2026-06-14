@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-20T09:00:00+09:00
+pubDatetime: 2026-05-12T09:00:00+09:00
 title: "Spring Boot 4 RestTemplate 대체: @HttpExchange와 RestTestClient (Spring Web 다시 읽기 7)"
 section: spring
 tags:
