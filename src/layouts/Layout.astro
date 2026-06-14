@@ -24,10 +24,12 @@ const {
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
-const rssHref = getRelativeLocaleUrl(
-  Astro.currentLocale ?? config.site.lang,
-  "rss.xml"
-);
+const locale = Astro.currentLocale ?? config.site.lang;
+const ogLocale = locale === "ko" ? "ko_KR" : locale.replace("-", "_");
+const twitterHandle = site.twitterHandle
+  ? `@${site.twitterHandle.replace(/^@/, "")}`
+  : undefined;
+const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
 ---
 
 <!doctype html>
@@ -60,17 +62,28 @@ const rssHref = getRelativeLocaleUrl(
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.title} />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
 
     <!-- Twitter / X -->
     <meta property="twitter:card" content="summary_large_image" />
+    {twitterHandle && <meta property="twitter:site" content={twitterHandle} />}
+    {
+      twitterHandle && (
+        <meta property="twitter:creator" content={twitterHandle} />
+      )
+    }
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImageURL} />
+    <meta property="twitter:image:alt" content={title} />
 
     <!-- RSS autodiscovery -->
     <link

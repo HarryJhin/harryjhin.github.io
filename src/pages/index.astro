@@ -9,7 +9,9 @@ import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
+import JsonLd from "@/components/JsonLd.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPersonSchema } from "@/utils/getPersonSchema";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -23,9 +25,34 @@ const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const homePath = getRelativeLocaleUrl(locale, "");
+
+const homeUrl = new URL(homePath, Astro.site).href;
+const searchUrl = new URL(getRelativeLocaleUrl(locale, "search"), Astro.site)
+  .href;
+const inLanguage = config.site.lang === "ko" ? "ko-KR" : config.site.lang;
+
+const websiteSchema = {
+  "@type": "WebSite",
+  name: config.site.title,
+  url: homeUrl,
+  description: config.site.description,
+  inLanguage,
+  publisher: getPersonSchema(),
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${searchUrl}?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
 ---
 
 <Layout>
+  <Fragment slot="head">
+    <JsonLd schema={websiteSchema} />
+  </Fragment>
   <Header />
   <main
     id="main-content"
