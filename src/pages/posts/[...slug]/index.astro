@@ -70,6 +70,7 @@ const {
   tags,
   hideEditPost,
   faq,
+  section,
 } = post.data;
 
 const { Content } = await render(post);
@@ -114,9 +115,16 @@ const ogImage = ogImageUrl
     class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
     data-pagefind-body
   >
+    {
+      section && (
+        <div class="text-accent text-xs font-bold tracking-widest uppercase">
+          {section}
+        </div>
+      )
+    }
     <h1
       style={{ viewTransitionName: toTransitionName(title) }}
-      class="text-accent inline-block text-2xl font-bold sm:text-3xl"
+      class="font-headline inline-block text-3xl font-extrabold sm:text-4xl"
     >
       {title}
     </h1>
