@@ -7,9 +7,12 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  --font-app: var(--font-google-sans-code);
-  --font-headline: var(--font-newsreader), var(--font-noto-serif-kr), Georgia,
-    serif;
+  /* Typographic voices:
+     - serif  → reading voice (masthead, headlines, article body, index titles)
+     - mono   → utility voice (code, datelines, kickers, tags, numerals) */
+  --font-mono: var(--font-google-sans-code);
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-headline: var(--font-newsreader), Georgia, serif;
 }
 
 /* Light theme values */
@@ -24,13 +27,13 @@
   --border: #ece9e9;
 }
 
-/* Dark theme values */
+/* Dark theme values — "night edition": warm amber accent, neutral slate rules */
 [data-theme="dark"] {
   --background: #212737;
   --foreground: #eaedf3;
-  --accent: #ff6b01;
-  --accent-foreground: #ffffff;
+  --accent: #e8995c;
+  --accent-foreground: #221504;
   --muted: #343f60;
   --muted-foreground: #afb9ca;
-  --border: #ab4b08;
+  --border: #39425b;
 }

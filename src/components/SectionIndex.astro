@@ -27,10 +27,9 @@ function seriesProp(post: CollectionEntry<"posts">) {
   {
     groups.map(group => (
       <section>
-        <h2 class="font-headline text-accent mb-2 flex items-baseline gap-2 text-xl font-bold">
-          <span class="opacity-40">##</span>
+        <h2 class="font-headline text-accent border-foreground/60 mb-2 flex items-baseline gap-2 border-t pt-2 text-xl font-bold tracking-wide">
           {group.label}
-          <span class="text-muted-foreground ms-auto text-xs font-normal">
+          <span class="font-mono text-muted-foreground ms-auto text-xs font-normal">
             {group.posts.length}
           </span>
         </h2>

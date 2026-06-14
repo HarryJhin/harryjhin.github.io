@@ -72,18 +72,11 @@ export default defineConfig({
       name: "Newsreader",
       cssVariable: "--font-newsreader",
       provider: fontProviders.google(),
+      // Latin body + headlines. Korean glyphs fall through to the OS serif
+      // (generic `serif` in the token), so no Korean webfont is shipped.
       fallbacks: ["Georgia", "serif"],
-      weights: [600, 800],
+      weights: [400, 600, 800],
       styles: ["normal", "italic"],
-      formats: ["woff", "ttf"],
-    },
-    {
-      name: "Noto Serif KR",
-      cssVariable: "--font-noto-serif-kr",
-      provider: fontProviders.google(),
-      fallbacks: ["serif"],
-      weights: [600, 800],
-      styles: ["normal"],
       formats: ["woff", "ttf"],
     },
   ],

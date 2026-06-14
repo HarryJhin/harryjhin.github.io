@@ -29,7 +29,7 @@ const mmdd = new Intl.DateTimeFormat("en-CA", {
 ---
 
 <div class="border-border/40 group flex items-baseline gap-3 border-b py-1.5">
-  <span class="text-muted-foreground w-6 shrink-0 text-sm tabular-nums">
+  <span class="font-mono text-muted-foreground w-6 shrink-0 text-sm tabular-nums">
     {num.toString().padStart(2, "0")}
   </span>
   <span class="flex-1 text-sm">
@@ -53,5 +53,5 @@ const mmdd = new Intl.DateTimeFormat("en-CA", {
       )
     }
   </span>
-  <span class="text-muted-foreground shrink-0 text-xs tabular-nums">{mmdd}</span>
+  <span class="font-mono text-muted-foreground shrink-0 text-xs tabular-nums">{mmdd}</span>
 </div>

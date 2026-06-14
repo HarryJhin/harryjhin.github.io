@@ -55,7 +55,6 @@ const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
       cssVariable="--font-newsreader"
       preload={[{ subset: "latin", weight: 800, style: "normal" }]}
     />
-    <Font cssVariable="--font-noto-serif-kr" />
 
     <!-- Primary meta -->
     <title>{title}</title>
@@ -165,7 +164,7 @@ const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
     <ClientRouter />
   </head>
   <body
-    class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
+    class="bg-background font-serif text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
     <slot />
     <script>
