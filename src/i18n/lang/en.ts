@@ -56,12 +56,9 @@ export default {
 
     seriesTitle: "Series",
     seriesDesc: "Collections of posts grouped into an ordered series.",
-    seriesItemTitle: "Series",
-    seriesItemDesc: "All posts in the series",
   },
   series: {
     partOf: "This is part {{order}} of {{total}} in 《{{title}}》.",
-    viewAll: "View the whole series",
     postCount: "{{count}} posts",
     contents: "Series contents",
   },

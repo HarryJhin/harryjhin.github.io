@@ -54,13 +54,10 @@ export interface UIStrings {
 
     seriesTitle: string;
     seriesDesc: string;
-    seriesItemTitle: string;
-    seriesItemDesc: string;
   };
   series: {
     /** "{{title}} {{total}}부작 중 {{order}}번째" */
     partOf: string;
-    viewAll: string;
     /** "{{count}}편" */
     postCount: string;
     contents: string;

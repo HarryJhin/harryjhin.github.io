@@ -56,12 +56,9 @@ export default {
 
     seriesTitle: "시리즈",
     seriesDesc: "여러 글을 순서대로 엮은 연재 모음입니다.",
-    seriesItemTitle: "시리즈",
-    seriesItemDesc: "다음 시리즈에 속한 글",
   },
   series: {
     partOf: "이 글은 《{{title}}》 {{total}}부작 중 {{order}}번째입니다.",
-    viewAll: "시리즈 전체 보기",
     postCount: "{{count}}편",
     contents: "시리즈 목차",
   },

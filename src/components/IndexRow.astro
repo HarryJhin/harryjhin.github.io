@@ -46,7 +46,9 @@ const mmdd = new Intl.DateTimeFormat("en-CA", {
           class="text-accent/80 hover:text-accent ms-1 align-middle text-xs whitespace-nowrap no-underline"
           title={series.title}
         >
-          ◆ {series.title} {series.order}/{series.total}
+          <span aria-hidden="true">◆</span> {series.title} {series.order}/{
+            series.total
+          }
         </a>
       )
     }
