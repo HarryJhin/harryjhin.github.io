@@ -1,0 +1,32 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import type { SeriesGroup } from "@/utils/getSeries";
+import { useTranslations, tplStr } from "@/i18n";
+import config from "@/config";
+
+interface Props {
+  group: SeriesGroup;
+}
+const { group } = Astro.props;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const href = getRelativeLocaleUrl(locale, `series/${group.id}/`);
+const count = tplStr(t.series.postCount, { count: group.posts.length });
+---
+
+<li class="my-6">
+  <a
+    href={href}
+    class="group inline-block text-lg font-medium decoration-dashed underline-offset-4 group-hover:underline"
+  >
+    <span class="group-hover:text-accent">{group.title}</span>
+    <span class="text-muted-foreground ms-2 text-sm tabular-nums">{count}</span>
+  </a>
+  {
+    group.description && (
+      <p class="text-muted-foreground mt-1 text-sm">{group.description}</p>
+    )
+  }
+</li>
