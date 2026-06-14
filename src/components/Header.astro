@@ -10,12 +10,33 @@ import IconX from "@/assets/icons/IconX.svg";
 import LinkButton from "./LinkButton.astro";
 import { stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
+import { getCollection } from "astro:content";
+import { postFilter } from "@/utils/postFilter";
 import config from "@/config";
+
+interface Props {
+  variant?: "home" | "compact";
+}
+const { variant = "compact" } = Astro.props;
 
 const { site, features } = config;
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
+
+// Masthead edition line (home only)
+let issueNo = 0;
+let editionDate = "";
+if (variant === "home") {
+  const posts = (await getCollection("posts")).filter(postFilter);
+  issueNo = posts.length;
+  editionDate = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: config.site.timezone,
+  }).format(new Date());
+}
 
 // Strip the base prefix so isActive comparisons work regardless of deploy subdirectory.
 // e.g. with base "/blog": "/blog/posts/slug" → "/posts/slug"
@@ -43,20 +64,53 @@ const isActive = (path: string) => {
 </a>
 
 <header
-  class="app-layout flex flex-col items-center justify-between sm:flex-row"
+  class:list={[
+    "app-layout flex w-full flex-col",
+    variant === "home"
+      ? "items-stretch"
+      : "items-center justify-between sm:flex-row",
+  ]}
 >
+  {
+    variant === "home" && (
+      <div class="w-full pt-4">
+        <hr class="border-foreground/40 border-t" />
+        <a href={getRelativeLocaleUrl(locale, "")} class="block no-underline">
+          <h1 class="font-headline py-1 text-center text-4xl font-extrabold tracking-tight sm:text-5xl">
+            {site.title}
+          </h1>
+        </a>
+        <div class="text-muted-foreground text-center text-[10px] tracking-[0.25em] uppercase">
+          No.{issueNo} · {editionDate} · SPRING · KOTLIN · CLOUD-NATIVE
+        </div>
+        <hr class="border-foreground mt-1.5 border-t-[3px] border-double" />
+      </div>
+    )
+  }
   <div
-    class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"
+    class:list={[
+      "bg-background relative flex w-full py-4 sm:py-6",
+      variant === "home"
+        ? "justify-center"
+        : "border-border items-baseline justify-between border-b sm:items-center",
+    ]}
   >
-    <a
-      href={getRelativeLocaleUrl(locale, "")}
-      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-    >
-      {site.title}
-    </a>
+    {
+      variant !== "home" && (
+        <a
+          href={getRelativeLocaleUrl(locale, "")}
+          class="font-headline absolute py-1 text-xl leading-8 font-extrabold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+        >
+          {site.title}
+        </a>
+      )
+    }
     <nav
       id="nav-menu"
-      class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
+      class:list={[
+        "flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:space-x-4 sm:py-0",
+        variant === "home" ? "sm:justify-center" : "sm:justify-end",
+      ]}
     >
       <button
         id="menu-btn"
