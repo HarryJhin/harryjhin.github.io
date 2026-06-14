@@ -3,6 +3,9 @@ author: 주진현
 pubDatetime: 2026-04-14T09:00:00+09:00
 title: "Spring Boot 4 HttpStatus 변경: RFC 9110 정렬과 Forwarded 헤더 (Spring Web 다시 읽기 6)"
 section: spring
+series:
+  slug: spring-web-boot4
+  order: 6
 tags:
   - spring-boot-4
   - spring-framework-7

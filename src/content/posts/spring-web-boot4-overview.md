@@ -4,6 +4,9 @@ pubDatetime: 2026-01-06T09:00:00+09:00
 title: "Spring Boot 4·Framework 7 Web 변경점 총정리: 무엇이 바뀌었나 (Spring Web 다시 읽기 1)"
 featured: true
 section: spring
+series:
+  slug: spring-web-boot4
+  order: 1
 tags:
   - spring-boot-4
   - spring-framework-7

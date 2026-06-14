@@ -3,6 +3,9 @@ author: 주진현
 pubDatetime: 2026-02-11T09:00:00+09:00
 title: "Spring Boot 4 API 버저닝: ApiVersionStrategy로 /v1 걷어내기 (Spring Web 다시 읽기 3)"
 section: spring
+series:
+  slug: spring-web-boot4
+  order: 3
 tags:
   - spring-boot-4
   - spring-framework-7

@@ -3,6 +3,9 @@ author: 주진현
 pubDatetime: 2026-03-23T09:00:00+09:00
 title: "Spring Boot 4 에러 응답 표준화: RFC 9457 ProblemDetail 사용법 (Spring Web 다시 읽기 5)"
 section: spring
+series:
+  slug: spring-web-boot4
+  order: 5
 tags:
   - spring-boot-4
   - spring-framework-7
