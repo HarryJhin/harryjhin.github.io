@@ -1,31 +1,32 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getPostUrl } from "@/utils/getPostPaths";
-import { toTransitionName } from "@/utils/toTransitionName";
-import Datetime from "./Datetime.astro";
+import config from "@/config";
 
 type Props = {
   variant?: "h2" | "h3";
 } & CollectionEntry<"posts">;
 
-const { variant: Heading = "h2", id, data, filePath } = Astro.props;
+const { id, data, filePath } = Astro.props;
+const { title, pubDatetime, modDatetime } = data;
 
-const { title, description, ...props } = data;
+const href = getPostUrl(id, filePath, Astro.currentLocale);
+const date = new Intl.DateTimeFormat("en-CA", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  timeZone: config.site.timezone,
+}).format(modDatetime ?? pubDatetime);
 ---
 
-<li class="my-6">
+<li>
   <a
-    href={getPostUrl(id, filePath, Astro.currentLocale)}
-    class:list={[
-      "text-accent inline-block text-lg font-medium",
-      "decoration-dashed underline-offset-4 hover:underline",
-      "focus-visible:no-underline focus-visible:underline-offset-0",
-    ]}
+    href={href}
+    class="border-border/40 hover:text-accent group flex items-baseline gap-3 border-b py-1.5 no-underline"
   >
-    <Heading transition:name={toTransitionName(title)}>
+    <span class="group-hover:decoration-accent flex-1 text-sm decoration-dashed group-hover:underline group-hover:underline-offset-4">
       {title}
-    </Heading>
+    </span>
+    <span class="text-muted-foreground shrink-0 text-xs tabular-nums">{date}</span>
   </a>
-  <Datetime {...props} />
-  <p>{description}</p>
 </li>
