@@ -142,6 +142,24 @@ protected ResponseEntity<Object> handleMethodArgumentNotValid(
 
 서버가 표준으로 내보내면 클라이언트가 표준으로 읽을 수 있다. `WebClient`는 `WebClientResponseException`, `RestTemplate`은 `RestClientResponseException`을 던지는데, 둘 다 `getResponseBodyAs(ProblemDetail.class)`로 에러 바디를 `ProblemDetail`로 디코드한다. 서비스마다 다른 에러 파서를 짜는 대신, 한 타입으로 받는다.
 
+도입부에서 말한 프론트엔드 인터셉터가 이 자리다. 브라우저 클라이언트도 발상은 같다. fetch나 axios로 받은 응답의 `Content-Type`이 `application/problem+json`이면 그게 표준 에러 바디라는 신호다. 인터셉터 한 곳에서 이 바디를 타입드 에러로 감싸면, 엔드포인트마다 에러 파서를 새로 짤 일이 없다.
+
+```typescript
+async function api<T>(url: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(url, init);
+  if (!res.ok) {
+    const ct = res.headers.get("content-type") ?? "";
+    if (ct.includes("application/problem+json")) {
+      throw new ApiError(await res.json()); // 바디는 ProblemDetail
+    }
+    throw new ApiError({ title: res.statusText, status: res.status });
+  }
+  return res.json();
+}
+```
+
+이렇게 감싼 에러는 `status`로 401을 걸러 로그인으로 보내거나, `type`으로 비즈니스 에러를 분기하는 데 쓴다. 검증 에러는 한 걸음 더 간다. 앞에서 `errors` 맵에 담아 보낸 필드별 메시지를 프론트는 폼 필드 에러로 되돌린다. react-hook-form이면 `errors`를 순회하며 `setError`를 부르는 게 전부다. 서버와 클라이언트의 검증 메시지가 같은 자리에 뜬다. 백엔드가 필드 이름만 약속대로 맞춰주면 매핑 코드는 짧다.
+
 ## 정리
 
 1부에서 "프론트엔드 인터셉터 하나로 모든 서비스의 에러를 같은 방식으로 파싱한다"고 했던 게 이거다. `ProblemDetail`은 데이터, `ErrorResponse`는 계약, 그리고 `properties` Map이 표준과 도메인 사이의 숨통이다. 핵심은 화려한 API가 아니라, 에러 바디 모양을 더 이상 팀마다 새로 정하지 않아도 된다는 점이다.
