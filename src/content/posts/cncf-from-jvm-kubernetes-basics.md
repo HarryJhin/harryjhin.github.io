@@ -178,3 +178,4 @@ OOMKilled 사고의 정체는 단순하다. Kubernetes는 컨테이너 전체 �
 - [Kubernetes Probes — Spring Boot Reference](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html)
 - [Application Availability — Spring Boot Reference](https://docs.spring.io/spring-boot/reference/features/spring-application.html)
 - [java Command (JDK 21) — Oracle](https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html)
+- [JDK 25 — OpenJDK Project](https://openjdk.org/projects/jdk/25/)

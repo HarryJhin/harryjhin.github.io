@@ -19,6 +19,8 @@ faq:
     answer: "2025 CNCF 연례 설문(2026년 1월 발표)에서 컨테이너 사용자의 82%가 프로덕션에서 Kubernetes를 쓰고, 생성형 AI 모델을 호스팅하는 조직의 66%가 추론의 일부 또는 전부를 Kubernetes 위에서 돌린다고 답했다. CNCF는 이를 'Kubernetes가 AI의 사실상 운영체제가 됐다'고 정리했다."
   - question: "AI 워크로드 시대에 JVM의 역할은?"
     answer: "JVM은 모델 런타임이 아니다. 모델 추론은 보통 Python·CUDA 스택(vLLM 등)이 KServe나 llm-d 위에서 돌린다. JVM은 그 위의 애플리케이션 층 — 오케스트레이션, RAG, 비즈니스 로직, API 서비스 — 을 맡아 모델 서버를 네트워크로 호출한다. Spring AI와 LangChain4j가 이 JVM 측 추상을 제공한다."
+  - question: "KServe와 vLLM은 어떻게 다르고 함께 쓰나?"
+    answer: "둘은 경쟁이 아니라 계층 관계다. vLLM은 LLM 추론을 빠르게 돌리는 엔진이고, KServe는 그 엔진을 감싸 서빙하는 플랫폼이다. KServe의 Hugging Face 런타임은 기본 backend로 vLLM을 써서 모델을 서빙하고, 모델 배포·오토스케일·카나리·다중 노드 분산 서빙은 KServe가, 토큰 생성 최적화는 vLLM이 맡는다. 모델이 vLLM에서 미지원이면 표준 Hugging Face backend로 자동 폴백한다."
   - question: "Spring AI와 LangChain4j 중 무엇을 쓰나?"
     answer: "Spring Boot 스택에 이미 들어와 있고 익숙한 방식으로 모델을 부르고 싶으면 Spring AI(2025년 5월 1.0 GA)가 자연스럽다. 더 많은 공급자(20개 넘는 LLM 공급자, 30개 넘는 임베딩 스토어)를 한 API로 묶고 싶으면 LangChain4j가 폭이 넓다. 둘 다 추론은 vLLM·KServe에 맡기고 JVM 측 추상만 제공한다."
   - question: "Kubernetes에서 GPU는 어떻게 할당하나?"

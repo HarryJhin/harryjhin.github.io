@@ -126,6 +126,8 @@ Flux는 CLI(`flux`) 우선이고 기본 웹 UI가 없다. 가볍고, 모든 게 
 | | Argo CD | Flux |
 |---|---|---|
 | 모델 | `Application` CRD 중심(앱=배포 단위) | 툴킷 컨트롤러 + `GitRepository`/`Kustomization`/`HelmRelease` |
+| 아키텍처 | 중앙 컨트롤 플레인(API 서버 + repository 서버 + Application 컨트롤러)이 앱을 reconcile | 툴킷 컨트롤러들이 클러스터 안에서 각자 reconcile |
+| 멀티클러스터·테넌시 | 단일 인스턴스가 외부 클러스터를 등록해 hub-and-spoke로 관리 | 네임스페이스 + Kubernetes RBAC로 테넌트 격리(`--no-cross-namespace-refs`) |
 | UI | 1급 웹 대시보드 | CLI 우선, 기본 UI 없음 |
 | 이미지 자동화 | 별도 컴포넌트(Argo CD Image Updater) | 툴킷 일부(image controller, 기본 미설치) |
 | 성숙도 | CNCF Graduated | CNCF Graduated |
@@ -144,7 +146,7 @@ Flux는 CLI(`flux`) 우선이고 기본 웹 UI가 없다. 가볍고, 모든 게 
 3번을 사람이 하면 또 손이 들어간다. 그래서 이미지 자동화가 있다. CI가 새 이미지를 푸시하면 도구가 레지스트리를 스캔해 매니페스트의 태그를 자동으로 올리고 Git에 커밋한다.
 
 - **Flux**: `image-reflector-controller`가 레지스트리를 스캔하고, `image-automation-controller`가 `ImagePolicy`(semver 정책)에 따라 매니페스트를 패치해 커밋한다. 부트스트랩 때 이 컨트롤러들을 추가로 켜야 한다.
-- **Argo CD**: 별도 컴포넌트인 Argo CD Image Updater가 같은 일을 한다.
+- **Argo CD**: 별도 컴포넌트인 Argo CD Image Updater가 같은 일을 한다. 다만 공식 문서가 스스로 "under active development"이며 비핵심 환경에서 테스트해 보길 권한다고 적어 둔다. Flux의 GA 툴킷 컨트롤러와 달리 성숙도 면에서 같은 수준으로 두긴 이르다.
 
 여기까지 오면 배포에서 사람의 손이 거의 빠진다. 개발자는 코드를 푸시하고, 나머지는 이미지 빌드 → 태그 bump → reconcile로 자동으로 흐른다. 2부의 probe가 새 파드의 정상 여부를 판정하고, 어긋나면 롤아웃이 멈춘다.
 
