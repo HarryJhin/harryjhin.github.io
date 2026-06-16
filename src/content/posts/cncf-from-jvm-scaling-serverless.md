@@ -18,7 +18,7 @@ faq:
   - question: "KEDA와 Kubernetes HPA는 어떻게 다른가?"
     answer: "KEDA는 HPA를 대체하지 않고 같이 쓴다. CPU·메모리만 보던 HPA에 Kafka 컨슈머 랙, 큐 길이 같은 외부 이벤트 지표를 외부 메트릭으로 공급한다. 0→1과 1→0 스케일은 keda-operator가 직접 처리하고, 1→N과 N→1은 HPA에 위임한다. ScaledObject CRD로 워크로드와 이벤트 소스를 연결한다. KEDA는 2023년 CNCF를 졸업했다."
   - question: "Knative scale-to-zero의 콜드 스타트가 JVM에서 왜 문제인가?"
-    answer: "scale-to-zero는 트래픽이 없으면 파드를 0으로 줄인다. 다음 요청이 오면 파드를 새로 띄우는데(콜드 스타트), 이때 JVM 기동 시간이 그대로 첫 요청 지연이 된다. JVM은 클래스 로딩·JIT 워밍업 때문에 기동이 느려서 이 지연이 크다. Knative는 2025년 9월 CNCF를 졸업했다."
+    answer: "scale-to-zero는 트래픽이 없으면 파드를 0으로 줄인다. 다음 요청이 오면 파드를 새로 띄우는데(콜드 스타트), 이때 JVM 기동 시간이 그대로 첫 요청 지연이 된다. JVM은 클래스 로딩·JIT 워밍업 때문에 기동이 느려서 이 지연이 크다. Knative는 2025년 10월 CNCF를 졸업했다."
   - question: "JVM 콜드 스타트를 줄이는 방법은?"
     answer: "네 갈래가 있다. GraalVM 네이티브 이미지(AOT 컴파일로 수백 ms 기동), CRaC(워밍업된 JVM을 체크포인트했다 복원), JDK 24부터의 AOT 캐시(Project Leyden, 클래스 로딩·링킹 사전 처리), Spring AOT 처리다. 각각 기동을 줄이는 메커니즘과 트레이드오프가 다르다."
 ---
@@ -72,7 +72,7 @@ spec:
         - image: registry.example.com/report-api:1.0.0
 ```
 
-이러면 `report-api`는 요청이 없을 때 0개로 떠 있다가, 요청이 오면 파드를 띄워 처리한다. 새 파드를 띄워 요청을 처리하는 이 순간을 Knative 문서도 **콜드 스타트**라고 부른다. Knative는 2025년 9월에 CNCF를 졸업했다.
+이러면 `report-api`는 요청이 없을 때 0개로 떠 있다가, 요청이 오면 파드를 띄워 처리한다. 새 파드를 띄워 요청을 처리하는 이 순간을 Knative 문서도 **콜드 스타트**라고 부른다. Knative는 2025년 10월에 CNCF를 졸업했다.
 
 그리고 여기가 JVM의 약점이 그대로 드러나는 자리다.
 

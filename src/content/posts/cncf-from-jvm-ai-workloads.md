@@ -24,7 +24,7 @@ faq:
   - question: "Spring AI와 LangChain4j 중 무엇을 쓰나?"
     answer: "Spring Boot 스택에 이미 들어와 있고 익숙한 방식으로 모델을 부르고 싶으면 Spring AI(2025년 5월 1.0 GA)가 자연스럽다. 더 많은 공급자(20개 넘는 LLM 공급자, 30개 넘는 임베딩 스토어)를 한 API로 묶고 싶으면 LangChain4j가 폭이 넓다. 둘 다 추론은 vLLM·KServe에 맡기고 JVM 측 추상만 제공한다."
   - question: "Kubernetes에서 GPU는 어떻게 할당하나?"
-    answer: "DRA(Dynamic Resource Allocation)가 GPU 같은 특수 하드웨어 할당을 담당한다. DRA의 core는 Kubernetes 1.34(2025년 9월)에서 GA됐고 이후 버전에서 드라이버와 기능이 더해지는 중이다. 일부 서브 기능은 아직 beta 단계다."
+    answer: "DRA(Dynamic Resource Allocation)가 GPU 같은 특수 하드웨어 할당을 담당한다. DRA의 core는 Kubernetes 1.34(2025년 8월)에서 GA됐고 이후 버전에서 드라이버와 기능이 더해지는 중이다. 일부 서브 기능은 아직 beta 단계다."
 ---
 
 1부에서 약속을 하나 미뤄뒀다. "Kubernetes가 AI의 운영체제가 됐다"는 2026년의 헤드라인을 던지고는, JVM 개발자와 무슨 상관이냐는 질문에 "마지막 10부에서 판다"고 했다. 이제 그 약속을 회수한다. 그리고 이 시리즈를 닫는다.
@@ -45,7 +45,7 @@ CNCF가 "Kubernetes가 AI의 사실상 운영체제"라고 정리한 근거다. 
 - **vLLM**: 오픈소스 LLM 추론 엔진. 사실상 표준급으로 쓰인다.
 - **llm-d**: vLLM과 Kubernetes 위에 분산 LLM 추론을 올리는 CNCF Sandbox 프로젝트. Red Hat·Google·IBM·NVIDIA 등이 함께 만든다.
 
-하드웨어 쪽도 메워졌다. GPU 같은 특수 자원 할당을 맡는 **DRA(Dynamic Resource Allocation)**의 core가 Kubernetes 1.34(2025년 9월)에서 GA됐다. 이후 버전에서 드라이버와 기능이 계속 더해지는 중이다(일부 서브 기능은 아직 beta다). 2부에서 메모리 limit을 이야기했는데, 이제 그 옆에 GPU 할당이라는 차원이 하나 더 붙은 셈이다.
+하드웨어 쪽도 메워졌다. GPU 같은 특수 자원 할당을 맡는 **DRA(Dynamic Resource Allocation)**의 core가 Kubernetes 1.34(2025년 8월)에서 GA됐다. 이후 버전에서 드라이버와 기능이 계속 더해지는 중이다(일부 서브 기능은 아직 beta다). 2부에서 메모리 limit을 이야기했는데, 이제 그 옆에 GPU 할당이라는 차원이 하나 더 붙은 셈이다.
 
 여기까지 보면 자연스러운 불안이 든다. 이건 다 Python의 세계 아닌가. 모델은 PyTorch로 짜고 CUDA로 돌린다. JVM은 어디 있나.
 
@@ -82,6 +82,7 @@ AI 시대에도 그 자리는 안 사라진다. 모델은 Python이 돌리겠지
 
 - [2025 CNCF Annual Cloud Native Survey](https://www.cncf.io/announcements/2026/01/20/kubernetes-established-as-the-de-facto-operating-system-for-ai-as-production-use-hits-82-in-2025-cncf-annual-cloud-native-survey/)
 - [KServe — CNCF Project](https://www.cncf.io/projects/kserve/)
+- [Kubernetes v1.34 Release](https://kubernetes.io/blog/2025/08/27/kubernetes-v1-34-release/)
 - [Kubernetes v1.34: DRA Updates](https://kubernetes.io/blog/2025/09/01/kubernetes-v1-34-dra-updates/)
 - [Spring AI 1.1 GA Released](https://spring.io/blog/2025/11/12/spring-ai-1-1-GA-released/)
 - [LangChain4j](https://docs.langchain4j.dev/intro/)

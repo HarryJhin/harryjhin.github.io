@@ -20,7 +20,7 @@ faq:
   - question: "Dapr는 서비스 메시와 무엇이 다른가?"
     answer: "서비스 메시는 트래픽 라우팅, mTLS 같은 네트워크 관심사를 사이드카로 뺀다. Dapr는 pub/sub, 상태 관리, 시크릿 같은 애플리케이션 레벨 빌딩 블록을 사이드카로 뺀다. 둘은 다른 층위를 다루므로 한 클러스터에서 함께 쓸 수 있다."
   - question: "cert-manager는 무엇을 자동화하나?"
-    answer: "Kubernetes에서 TLS 인증서 발급과 갱신을 자동화한다. Certificate, Issuer, ClusterIssuer CRD로 선언하고 ACME(Let's Encrypt) 등과 연동한다. Spring 서비스의 TLS·mTLS를 게이트웨이·인그레스 레벨에서 수작업 없이 처리한다. 2024년 9월 CNCF를 졸업했다."
+    answer: "Kubernetes에서 TLS 인증서 발급과 갱신을 자동화한다. Certificate, Issuer, ClusterIssuer CRD로 선언하고 ACME(Let's Encrypt) 등과 연동한다. Spring 서비스의 TLS·mTLS를 게이트웨이·인그레스 레벨에서 수작업 없이 처리한다. 2024년 11월 CNCF를 졸업했다."
   - question: "Backstage는 졸업 프로젝트인가?"
     answer: "아니다. Backstage는 CNCF Incubating 단계다(2022년 인큐베이터 합류). Spotify가 만들어 기증한 개발자 포털로, 소프트웨어 카탈로그·템플릿(스캐폴더)·TechDocs를 제공한다. 인큐베이팅 단계지만 채택과 개발 활동이 활발하다."
 ---
@@ -77,7 +77,7 @@ spec:
     - my-service.example.com
 ```
 
-`Issuer`·`ClusterIssuer`가 인증서를 어디서 받을지(예: Let's Encrypt ACME) 정하고, `Certificate`가 무엇을 발급받을지 선언한다. 만료 전 갱신도 cert-manager가 알아서 한다. Spring 서비스 입장에선 TLS·mTLS가 게이트웨이·인그레스 레벨에서 수작업 없이 붙는다. 7부에서 메시가 mTLS를 깔 때도 그 뒤에서 인증서를 대주는 게 보통 cert-manager다. 2024년 9월에 졸업했고 1.20 라인이다.
+`Issuer`·`ClusterIssuer`가 인증서를 어디서 받을지(예: Let's Encrypt ACME) 정하고, `Certificate`가 무엇을 발급받을지 선언한다. 만료 전 갱신도 cert-manager가 알아서 한다. Spring 서비스 입장에선 TLS·mTLS가 게이트웨이·인그레스 레벨에서 수작업 없이 붙는다. 7부에서 메시가 mTLS를 깔 때도 그 뒤에서 인증서를 대주는 게 보통 cert-manager다. 2024년 11월에 졸업했고 1.20 라인이다.
 
 ## Backstage: 흩어진 서비스를 한 포털로
 

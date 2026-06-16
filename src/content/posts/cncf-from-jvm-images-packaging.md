@@ -97,7 +97,7 @@ Spring Boot는 실행 가능한 jar를 통짜로 두지 않고 네 레이어로 
 
 이미지가 생겼으니 이제 Kubernetes에 올릴 차례다. 그런데 2부에서 본 Deployment, Service, probe, ConfigMap을 환경마다(dev, staging, prod) 복붙하면 금세 관리가 안 된다. 이미지 태그 하나 바꾸려고 YAML 네 군데를 고친다.
 
-**Helm**이 이걸 패키징한다. CNCF Graduated 프로젝트이고(2020년 5월 졸업), Kubernetes 매니페스트의 사실상 패키지 매니저다.
+**Helm**이 이걸 패키징한다. CNCF Graduated 프로젝트이고(2020년 4월 졸업), Kubernetes 매니페스트의 사실상 패키지 매니저다.
 
 > [!NOTE]
 > 버전 주의. 2025년 11월에 **Helm 4**가 나왔다. 6년 만의 첫 메이저 버전이고, 2026년 6월 현재 stable 라인은 4.x다. Helm 3도 별도 라인으로 유지보수된다. 오래된 문서나 블로그가 "Helm 3" 기준인 경우가 많으니, 새로 시작한다면 4.x를 기준으로 잡자.
