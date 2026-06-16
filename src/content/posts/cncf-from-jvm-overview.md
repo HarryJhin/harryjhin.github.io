@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T09:00:00+09:00
+pubDatetime: 2026-06-01T09:00:00+09:00
 title: "지도: 2026년 CNCF, JVM 개발자의 입장에서 (JVM에서 본 클라우드 네이티브 1)"
 featured: true
 section: cloud-native

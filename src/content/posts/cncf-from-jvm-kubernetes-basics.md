@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T09:10:00+09:00
+pubDatetime: 2026-06-02T09:00:00+09:00
 title: "Kubernetes 기초: Spring Boot 컨테이너를 띄운다는 것 (JVM에서 본 클라우드 네이티브 2)"
 featured: false
 section: cloud-native

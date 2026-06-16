@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T10:10:00+09:00
+pubDatetime: 2026-06-08T09:00:00+09:00
 title: "스케일링과 서버리스: KEDA와 Knative (JVM에서 본 클라우드 네이티브 8)"
 featured: false
 section: cloud-native

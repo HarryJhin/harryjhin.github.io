@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T10:30:00+09:00
+pubDatetime: 2026-06-10T09:00:00+09:00
 title: "AI 워크로드 시대의 JVM (JVM에서 본 클라우드 네이티브 10)"
 featured: false
 section: cloud-native

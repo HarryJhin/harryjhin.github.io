@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T09:20:00+09:00
+pubDatetime: 2026-06-03T09:00:00+09:00
 title: "이미지와 패키징: Jib·Buildpacks·Helm (JVM에서 본 클라우드 네이티브 3)"
 featured: false
 section: cloud-native

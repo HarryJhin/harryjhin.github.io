@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T10:00:00+09:00
+pubDatetime: 2026-06-07T09:00:00+09:00
 title: "서비스 메시: Istio·Linkerd, 그리고 Cilium (JVM에서 본 클라우드 네이티브 7)"
 featured: false
 section: cloud-native

@@ -56,5 +56,11 @@ export default defineAstroPaperConfig({
       description:
         "Spring Boot 4·Framework 7의 Web 변경점을 표준 관점에서 따라가는 7부작.",
     },
+    {
+      id: "cncf-from-jvm",
+      title: "JVM에서 본 클라우드 네이티브",
+      description:
+        "Spring Boot 컨테이너를 Kubernetes에 올리는 개발자가 실제로 만나는 CNCF 프로젝트를 순서대로 따라가는 10부작.",
+    },
   ],
 });

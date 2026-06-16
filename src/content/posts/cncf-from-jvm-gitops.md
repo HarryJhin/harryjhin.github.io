@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T09:30:00+09:00
+pubDatetime: 2026-06-04T09:00:00+09:00
 title: "GitOps: Argo CD와 Flux (JVM에서 본 클라우드 네이티브 4)"
 featured: false
 section: cloud-native

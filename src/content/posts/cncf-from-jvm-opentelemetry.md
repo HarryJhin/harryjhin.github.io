@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T09:40:00+09:00
+pubDatetime: 2026-06-05T09:00:00+09:00
 title: "관측성 ①: OpenTelemetry와 Micrometer (JVM에서 본 클라우드 네이티브 5)"
 featured: false
 section: cloud-native

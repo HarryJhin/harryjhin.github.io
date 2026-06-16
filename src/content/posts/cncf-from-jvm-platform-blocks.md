@@ -1,6 +1,6 @@
 ---
 author: 주진현
-pubDatetime: 2026-06-16T10:20:00+09:00
+pubDatetime: 2026-06-09T09:00:00+09:00
 title: "플랫폼 빌딩 블록: Dapr·cert-manager·Backstage (JVM에서 본 클라우드 네이티브 9)"
 featured: false
 section: cloud-native
