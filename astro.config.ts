@@ -4,6 +4,9 @@ import {
   fontProviders,
   svgoOptimizer,
 } from "astro/config";
+import { readFileSync, readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -35,6 +38,43 @@ function rehypeImageLoading() {
   };
 }
 
+// Map each post URL to its `modDatetime ?? pubDatetime` so the sitemap can emit
+// <lastmod>. This runs at config-eval time in plain Node, where `astro:content`
+// is unavailable — so it reads the two frontmatter date lines directly instead
+// of loading the collection. Posts are flat files, so slug = filename; a future
+// nested post would simply miss its lastmod rather than get a wrong one.
+function buildPostLastmod() {
+  const postsDir = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "src/content/posts"
+  );
+  const byPath = new Map<string, string>();
+  let latest = 0;
+  for (const file of readdirSync(postsDir)) {
+    if (file.startsWith("_") || !/\.mdx?$/.test(file)) continue;
+    const frontmatter = readFileSync(join(postsDir, file), "utf8").match(
+      /^---\r?\n([\s\S]*?)\r?\n---/
+    )?.[1];
+    if (!frontmatter) continue;
+    const read = (key: string) =>
+      frontmatter
+        .match(new RegExp(`^${key}:\\s*(.+?)\\s*$`, "m"))?.[1]
+        ?.replace(/^["']|["']$/g, "");
+    const mod = read("modDatetime");
+    const stamp = mod && mod !== "null" ? mod : read("pubDatetime");
+    const date = stamp ? new Date(stamp) : null;
+    if (!date || Number.isNaN(date.valueOf())) continue;
+    byPath.set(`/posts/${file.replace(/\.mdx?$/, "")}/`, date.toISOString());
+    latest = Math.max(latest, date.valueOf());
+  }
+  return {
+    byPath,
+    latest: latest ? new Date(latest).toISOString() : undefined,
+  };
+}
+
+const postLastmod = buildPostLastmod();
+
 export default defineConfig({
   site: config.site.url,
   integrations: [
@@ -42,6 +82,21 @@ export default defineConfig({
     sitemap({
       filter: page =>
         config.features?.showArchives !== false || !page.endsWith("/archives/"),
+      serialize(item) {
+        const { pathname } = new URL(item.url);
+        const postDate = postLastmod.byPath.get(pathname);
+        if (postDate) {
+          // Post detail page: its own modified/published date.
+          item.lastmod = postDate;
+        } else if (
+          postLastmod.latest &&
+          (pathname === "/" || /^\/posts\/(\d+\/)?$/.test(pathname))
+        ) {
+          // Home + paginated post listings refresh when the newest post lands.
+          item.lastmod = postLastmod.latest;
+        }
+        return item;
+      },
     }),
   ],
   i18n: {
