@@ -1,0 +1,36 @@
+---
+interface Props {
+  hoverable?: boolean;
+  radius?: "md" | "lg";
+  padding?: string;
+  class?: string;
+}
+
+const { hoverable = false, radius = "lg", padding = "var(--space-6)", class: cls, ...attrs } = Astro.props;
+
+const radiusValue = radius === "md" ? "var(--radius-md)" : "var(--radius-lg)";
+---
+
+<div
+  class:list={["ds-card", { hoverable }, cls]}
+  style={`border-radius: ${radiusValue}; padding: ${padding}`}
+  {...attrs}
+>
+  <slot />
+</div>
+
+<style>
+  .ds-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    transition:
+      transform var(--duration-base) var(--ease-standard),
+      box-shadow var(--duration-base) var(--ease-standard);
+  }
+
+  .ds-card.hoverable:hover {
+    transform: translateY(var(--lift-card));
+    box-shadow: var(--shadow-card-hover);
+  }
+</style>
