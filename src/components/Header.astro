@@ -1,16 +1,15 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import IconUnderline from "@/assets/icons/IconUnderline.svg";
+import { getCollection } from "astro:content";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import IconArchive from "@/assets/icons/IconArchive.svg";
-import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
-import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconX from "@/assets/icons/IconX.svg";
 import LinkButton from "./LinkButton.astro";
+import SectionTag from "./SectionTag.astro";
 import { stripBase, stripLocale } from "@/utils/withBase";
+import { getPostSlug } from "@/utils/getPostPaths";
 import { useTranslations } from "@/i18n";
-import { getCollection } from "astro:content";
 import { postFilter } from "@/utils/postFilter";
 import config from "@/config";
 
@@ -23,6 +22,7 @@ const { site, features } = config;
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
+const homeHref = getRelativeLocaleUrl(locale, "");
 
 // Masthead edition line (home only)
 let issueNo = 0;
@@ -53,175 +53,162 @@ const isActive = (path: string) => {
   const pathArray = path.split("/").filter(p => p.trim());
   return currentPath === path || currentPathArray[0] === pathArray[0];
 };
+
+// On a post's own page, light up that post's section pill in the nav below.
+let currentSection: string | undefined;
+if (currentPath.startsWith("/posts/")) {
+  const allPosts = await getCollection("posts");
+  const postSlug = currentPath.replace(/^\/posts/, "");
+  currentSection = allPosts.find(
+    post => getPostSlug(post.id, post.filePath) === postSlug
+  )?.data.section;
+}
+
+// Wordmark: last word of the site title carries the accent color.
+const titleWords = site.title.split(" ");
+const titleAccent = titleWords.at(-1);
+const titleLead = titleWords.slice(0, -1).join(" ");
+
+// Bottom masthead kicker — driven by the configured sections, not a hardcoded list.
+const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · ");
 ---
 
-<a
-  id="skip-to-content"
-  href="#main-content"
-  class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"
->
+<a id="skip-to-content" href="#main-content" class="skip-link">
   {t.a11y.skipToContent}
 </a>
 
-<header
-  class:list={[
-    "app-layout flex w-full flex-col",
-    variant === "home"
-      ? "items-stretch"
-      : "items-center justify-between sm:flex-row",
-  ]}
->
+<header>
   {
     variant === "home" && (
-      <div class="w-full pt-4">
-        <hr class="border-foreground/40 border-t" />
-        <a href={getRelativeLocaleUrl(locale, "")} class="block no-underline">
-          <h1 class="font-headline py-1 text-center text-4xl font-extrabold tracking-tight sm:text-5xl">
-            {site.title}
-          </h1>
-        </a>
-        <div class="font-mono text-muted-foreground text-center text-[10px] tracking-[0.25em] uppercase">
-          No.{issueNo} · {editionDate} · SPRING · KOTLIN · CLOUD-NATIVE
+      <div class="masthead">
+        <div class="masthead-inner">
+          <div class="masthead-kicker">
+            <span>The JVM Ecosystem, Indexed</span>
+            <span>
+              {editionDate} · Issue {issueNo}
+            </span>
+          </div>
+          <a href={homeHref} class="wordmark wordmark-lg">
+            <h1>
+              {titleLead && `${titleLead} `}
+              <span class="accent">{titleAccent}</span>
+            </h1>
+          </a>
+          <p class="masthead-sections">{sectionKicker}</p>
         </div>
-        <hr class="border-foreground mt-1.5 border-t-[3px] border-double" />
       </div>
     )
   }
-  <div
-    class:list={[
-      "bg-background relative flex w-full py-4 sm:py-6",
-      variant === "home"
-        ? "justify-center"
-        : "border-border items-baseline justify-between border-b sm:items-center",
-    ]}
-  >
-    {
-      variant !== "home" && (
-        <a
-          href={getRelativeLocaleUrl(locale, "")}
-          class="font-headline absolute py-1 text-xl leading-8 font-extrabold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+
+  <div class="section-nav">
+    <div class="section-nav-inner">
+      {
+        variant !== "home" && (
+          <a href={homeHref} class="wordmark wordmark-sm">
+            {titleLead && `${titleLead} `}
+            <span class="accent">{titleAccent}</span>
+          </a>
+        )
+      }
+      <nav id="nav-menu" aria-label={t.nav.posts}>
+        <button
+          id="menu-btn"
+          class="menu-btn"
+          aria-label={t.a11y.openMenu}
+          aria-expanded="false"
+          aria-controls="menu-items"
+          data-label-open={t.a11y.openMenu}
+          data-label-close={t.a11y.closeMenu}
         >
-          {site.title}
-        </a>
-      )
-    }
-    <nav
-      id="nav-menu"
-      class:list={[
-        "flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:space-x-4 sm:py-0",
-        variant === "home" ? "sm:justify-center" : "sm:justify-end",
-      ]}
-    >
-      <button
-        id="menu-btn"
-        class="focus-outline self-end p-2 sm:hidden"
-        aria-label={t.a11y.openMenu}
-        aria-expanded="false"
-        aria-controls="menu-items"
-        data-label-open={t.a11y.openMenu}
-        data-label-close={t.a11y.closeMenu}
-      >
-        <IconX id="close-icon" class="hidden" />
-        <IconMenuDeep id="menu-icon" />
-      </button>
-      <ul
-        id="menu-items"
-        class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-2 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1"
-      >
-        <li class="col-span-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "posts")}
-            class:list={{ "active-nav": isActive("/posts") }}
-          >
-            {t.nav.posts}
-          </a>
-        </li>
-        <li class="col-span-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "tags")}
-            class:list={{ "active-nav": isActive("/tags") }}
-          >
-            {t.nav.tags}
-          </a>
-        </li>
-        <li class="col-span-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "series")}
-            class:list={{ "active-nav": isActive("/series") }}
-          >
-            {t.nav.series}
-          </a>
-        </li>
-        <li class="col-span-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "about")}
-            class:list={{ "active-nav": isActive("/about") }}
-          >
-            {t.nav.about}
-          </a>
-        </li>
-        {
-          features.showArchives && (
-            <li class="col-span-2">
-              <LinkButton
-                href={getRelativeLocaleUrl(locale, "archives")}
-                class:list={[
-                  "focus-outline flex size-full justify-center p-3 sm:relative sm:size-8 sm:p-0",
-                  { "active-nav": isActive("/archives") },
-                ]}
-                title={t.nav.archives}
-                aria-label={t.nav.archives}
-              >
-                <IconArchive class="hidden sm:absolute sm:top-1/2 sm:left-1/2 sm:block sm:size-6 sm:-translate-x-1/2 sm:-translate-y-1/2" />
-                <span class="sm:sr-only">{t.nav.archives}</span>
-                {isActive("/archives") && (
-                  <IconUnderline
-                    aria-hidden="true"
-                    class="scale-125 max-sm:hidden sm:absolute sm:bottom-0 sm:w-6"
-                  />
-                )}
-              </LinkButton>
-            </li>
-          )
-        }
-        {
-          features.search !== false && (
-            <li class="col-span-1 flex items-center justify-center">
-              <LinkButton
-                href={getRelativeLocaleUrl(locale, "search")}
-                class:list={["focus-outline relative size-8"]}
-                title={t.nav.search}
-                aria-label={t.nav.search}
-              >
-                <IconSearch class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" />
-                <span class="sr-only">{t.nav.search}</span>
-                {isActive("/search") && (
-                  <IconUnderline
-                    aria-hidden="true"
-                    class="absolute bottom-0 w-6 scale-125 max-sm:inset-s-2"
-                  />
-                )}
-              </LinkButton>
-            </li>
-          )
-        }
-        {
-          features.lightAndDarkMode && (
-            <li class="col-span-1 flex items-center justify-center">
-              <button
-                id="theme-btn"
-                class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8"
-                title={t.a11y.toggleTheme}
-                aria-label={t.a11y.toggleTheme}
-              >
-                <IconMoon class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                <IconSunHigh class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-              </button>
-            </li>
-          )
-        }
-      </ul>
-    </nav>
+          <IconX id="close-icon" class="hidden menu-btn-icon" />
+          <IconMenuDeep id="menu-icon" class="menu-btn-icon" />
+        </button>
+        <ul id="menu-items" class="hidden menu-items">
+          {
+            config.sections.map(s => {
+              const active = currentSection === s.id;
+              return (
+                <li class="pill-item">
+                  <a
+                    href={`${homeHref}#section-${s.id}`}
+                    class="pill-link"
+                    aria-current={active ? "page" : undefined}
+                  >
+                    <SectionTag section={s.id} active={active}>
+                      {s.label}
+                    </SectionTag>
+                  </a>
+                </li>
+              );
+            })
+          }
+          <li class="nav-start">
+            <a
+              href={getRelativeLocaleUrl(locale, "posts")}
+              class:list={["nav-link", { active: isActive("/posts") }]}
+            >
+              {t.nav.posts}
+            </a>
+          </li>
+          <li>
+            <a
+              href={getRelativeLocaleUrl(locale, "tags")}
+              class:list={["nav-link", { active: isActive("/tags") }]}
+            >
+              {t.nav.tags}
+            </a>
+          </li>
+          <li>
+            <a
+              href={getRelativeLocaleUrl(locale, "series")}
+              class:list={["nav-link", { active: isActive("/series") }]}
+            >
+              {t.nav.series}
+            </a>
+          </li>
+          <li>
+            <a
+              href={getRelativeLocaleUrl(locale, "about")}
+              class:list={["nav-link", { active: isActive("/about") }]}
+            >
+              {t.nav.about}
+            </a>
+          </li>
+          {
+            features.showArchives && (
+              <li>
+                <LinkButton
+                  href={getRelativeLocaleUrl(locale, "archives")}
+                  class:list={["icon-link", { active: isActive("/archives") }]}
+                  title={t.nav.archives}
+                  aria-label={t.nav.archives}
+                  aria-current={isActive("/archives") ? "page" : undefined}
+                >
+                  <IconArchive class="icon-svg" aria-hidden="true" />
+                  <span class="icon-label">{t.nav.archives}</span>
+                </LinkButton>
+              </li>
+            )
+          }
+          {
+            features.search !== false && (
+              <li>
+                <LinkButton
+                  href={getRelativeLocaleUrl(locale, "search")}
+                  class:list={["icon-link", { active: isActive("/search") }]}
+                  title={t.nav.search}
+                  aria-label={t.nav.search}
+                  aria-current={isActive("/search") ? "page" : undefined}
+                >
+                  <IconSearch class="icon-svg" aria-hidden="true" />
+                  <span class="icon-label">{t.nav.search}</span>
+                </LinkButton>
+              </li>
+            )
+          }
+        </ul>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -254,3 +241,224 @@ const isActive = (path: string) => {
 
   document.addEventListener("astro:after-swap", toggleNav);
 </script>
+
+<style>
+  .skip-link {
+    position: absolute;
+    z-index: 50;
+    top: -9999px;
+    inset-inline-start: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+  }
+  .skip-link:focus {
+    top: var(--space-4);
+  }
+
+  /* Home masthead — DS FrontPage banner */
+  .masthead {
+    border-top: 2px solid var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .masthead-inner {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 14px var(--space-4);
+  }
+  .masthead-kicker {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-family: var(--font-sans);
+    font-size: var(--text-overline);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-text-muted);
+  }
+  .masthead-sections {
+    margin: var(--space-1) 0 0;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: var(--text-overline);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+  }
+
+  /* Wordmark — shared between the home masthead and the sticky inner nav */
+  .wordmark {
+    display: block;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+  .wordmark .accent {
+    color: var(--color-primary);
+  }
+  .wordmark-lg {
+    text-align: center;
+    white-space: normal;
+  }
+  .wordmark-lg h1 {
+    margin: 0;
+    padding: var(--space-2) 0;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    font-size: clamp(32px, 12vw, 44px);
+    letter-spacing: -0.04em;
+  }
+  .wordmark-sm {
+    font-size: 18px;
+    letter-spacing: var(--tracking-heading);
+  }
+
+  /* Sticky section nav — DS NavBar */
+  .section-nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .section-nav-inner {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .section-nav-inner nav {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--color-text-primary);
+  }
+  .menu-btn-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .menu-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .pill-link {
+    display: inline-flex;
+    text-decoration: none;
+    border-radius: var(--radius-full);
+  }
+  .pill-link:hover :global(.section-tag) {
+    background: var(--color-border);
+  }
+  .pill-link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .nav-link {
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding-block: 2px;
+    border-bottom: 2px solid transparent;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+  }
+  .nav-link:hover {
+    color: var(--color-primary-hover);
+  }
+  .nav-link.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .icon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-medium);
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+  .icon-link:hover {
+    color: var(--color-primary-hover);
+  }
+  .icon-link.active {
+    color: var(--color-primary);
+  }
+  .icon-svg {
+    display: none;
+  }
+
+  /* Mobile drawer (<768px): menu button opens a vertical stack of section
+     pills + utility links (JS toggles the "hidden"/"grid" Tailwind utilities
+     on #menu-items — see <script> below). */
+  @media (max-width: 767.98px) {
+    #menu-items.grid {
+      padding-block: var(--space-4);
+      border-top: 1px solid var(--color-border);
+    }
+  }
+
+  /* Desktop (>=768px): everything sits in one row; utility links push to the
+     far end via margin-inline-start:auto on the first non-pill item. */
+  @media (min-width: 768px) {
+    .menu-btn {
+      display: none;
+    }
+    #menu-items {
+      display: flex !important;
+      flex-direction: row;
+    }
+    .nav-start {
+      margin-inline-start: auto;
+    }
+    .icon-link {
+      width: 32px;
+      height: 32px;
+      justify-content: center;
+    }
+    .icon-svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
+    .icon-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+</style>
