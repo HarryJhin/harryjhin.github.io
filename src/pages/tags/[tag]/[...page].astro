@@ -46,9 +46,9 @@ const t = useTranslations(locale);
     pageTitle={`${t.pages.tagTitle}: ${tagName}`}
     pageDesc={`${t.pages.tagDesc} "${tagName}".`}
   >
-    <div>
-      {page.data.map(data => <Card post={data} />)}
-    </div>
+    <ul class="flex flex-col gap-8">
+      {page.data.map(data => <li><Card post={data} /></li>)}
+    </ul>
   </Main>
 
   <Pagination {page} />

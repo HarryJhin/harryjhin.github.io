@@ -63,7 +63,7 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
                       {monthGroup.length}
                     </sup>
                   </div>
-                  <div>
+                  <ul class="flex flex-col gap-8">
                     {monthGroup
                       .sort(
                         (a, b) =>
@@ -75,9 +75,11 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
                           )
                       )
                       .map(data => (
-                        <Card post={data} />
+                        <li>
+                          <Card post={data} />
+                        </li>
                       ))}
-                  </div>
+                  </ul>
                 </div>
               ))}
           </div>

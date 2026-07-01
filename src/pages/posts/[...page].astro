@@ -29,9 +29,9 @@ const t = useTranslations(locale);
   <Breadcrumb />
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
-    <div>
-      {page.data.map(data => <Card post={data} />)}
-    </div>
+    <ul class="flex flex-col gap-8">
+      {page.data.map(data => <li><Card post={data} /></li>)}
+    </ul>
   </Main>
 
   <Pagination {page} />
