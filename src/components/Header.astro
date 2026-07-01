@@ -77,144 +77,147 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
   {t.a11y.skipToContent}
 </a>
 
-<header>
-  {
-    variant === "home" && (
-      <div class="masthead">
-        <div class="masthead-inner">
-          <div class="masthead-kicker">
-            <span>The JVM Ecosystem, Indexed</span>
-            <span>
-              {editionDate} · Issue {issueNo}
-            </span>
-          </div>
-          <a href={homeHref} class="wordmark wordmark-lg">
-            <h1>
-              {titleLead && `${titleLead} `}
-              <span class="accent">{titleAccent}</span>
-            </h1>
-          </a>
-          <p class="masthead-sections">{sectionKicker}</p>
+{
+  /* Sticky nav must live outside <header> so its containing block is the
+     page's own scroll flow (body), not the ~215px-tall header box — otherwise
+     it un-sticks once scrolled past the header (see task-2-brief.md). */
+}
+{
+  variant === "home" && (
+    <header class="masthead">
+      <div class="masthead-inner">
+        <div class="masthead-kicker">
+          <span>The JVM Ecosystem, Indexed</span>
+          <span>
+            {editionDate} · Issue {issueNo}
+          </span>
         </div>
-      </div>
-    )
-  }
-
-  <div class="section-nav">
-    <div class="section-nav-inner">
-      {
-        variant !== "home" && (
-          <a href={homeHref} class="wordmark wordmark-sm">
+        <a href={homeHref} class="wordmark wordmark-lg">
+          <h1>
             {titleLead && `${titleLead} `}
             <span class="accent">{titleAccent}</span>
+          </h1>
+        </a>
+        <p class="masthead-sections">{sectionKicker}</p>
+      </div>
+    </header>
+  )
+}
+
+<div class="section-nav">
+  <div class="section-nav-inner">
+    {
+      variant !== "home" && (
+        <a href={homeHref} class="wordmark wordmark-sm">
+          {titleLead && `${titleLead} `}
+          <span class="accent">{titleAccent}</span>
+        </a>
+      )
+    }
+    <nav id="nav-menu" aria-label={t.nav.posts}>
+      <button
+        id="menu-btn"
+        class="menu-btn"
+        aria-label={t.a11y.openMenu}
+        aria-expanded="false"
+        aria-controls="menu-items"
+        data-label-open={t.a11y.openMenu}
+        data-label-close={t.a11y.closeMenu}
+      >
+        <IconX id="close-icon" class="hidden menu-btn-icon" />
+        <IconMenuDeep id="menu-icon" class="menu-btn-icon" />
+      </button>
+      <ul id="menu-items" class="hidden menu-items">
+        {
+          config.sections.map(s => {
+            const active = currentSection === s.id;
+            return (
+              <li class="pill-item">
+                <a
+                  href={`${homeHref}#section-${s.id}`}
+                  class="pill-link"
+                  aria-current={active ? "page" : undefined}
+                >
+                  <SectionTag section={s.id} active={active}>
+                    {s.label}
+                  </SectionTag>
+                </a>
+              </li>
+            );
+          })
+        }
+        <li class="nav-start">
+          <a
+            href={getRelativeLocaleUrl(locale, "posts")}
+            class:list={["nav-link", { active: isActive("/posts") }]}
+            aria-current={isActive("/posts") ? "page" : undefined}
+          >
+            {t.nav.posts}
           </a>
-        )
-      }
-      <nav id="nav-menu" aria-label={t.nav.posts}>
-        <button
-          id="menu-btn"
-          class="menu-btn"
-          aria-label={t.a11y.openMenu}
-          aria-expanded="false"
-          aria-controls="menu-items"
-          data-label-open={t.a11y.openMenu}
-          data-label-close={t.a11y.closeMenu}
-        >
-          <IconX id="close-icon" class="hidden menu-btn-icon" />
-          <IconMenuDeep id="menu-icon" class="menu-btn-icon" />
-        </button>
-        <ul id="menu-items" class="hidden menu-items">
-          {
-            config.sections.map(s => {
-              const active = currentSection === s.id;
-              return (
-                <li class="pill-item">
-                  <a
-                    href={`${homeHref}#section-${s.id}`}
-                    class="pill-link"
-                    aria-current={active ? "page" : undefined}
-                  >
-                    <SectionTag section={s.id} active={active}>
-                      {s.label}
-                    </SectionTag>
-                  </a>
-                </li>
-              );
-            })
-          }
-          <li class="nav-start">
-            <a
-              href={getRelativeLocaleUrl(locale, "posts")}
-              class:list={["nav-link", { active: isActive("/posts") }]}
-              aria-current={isActive("/posts") ? "page" : undefined}
-            >
-              {t.nav.posts}
-            </a>
-          </li>
-          <li>
-            <a
-              href={getRelativeLocaleUrl(locale, "tags")}
-              class:list={["nav-link", { active: isActive("/tags") }]}
-              aria-current={isActive("/tags") ? "page" : undefined}
-            >
-              {t.nav.tags}
-            </a>
-          </li>
-          <li>
-            <a
-              href={getRelativeLocaleUrl(locale, "series")}
-              class:list={["nav-link", { active: isActive("/series") }]}
-              aria-current={isActive("/series") ? "page" : undefined}
-            >
-              {t.nav.series}
-            </a>
-          </li>
-          <li>
-            <a
-              href={getRelativeLocaleUrl(locale, "about")}
-              class:list={["nav-link", { active: isActive("/about") }]}
-              aria-current={isActive("/about") ? "page" : undefined}
-            >
-              {t.nav.about}
-            </a>
-          </li>
-          {
-            features.showArchives && (
-              <li>
-                <LinkButton
-                  href={getRelativeLocaleUrl(locale, "archives")}
-                  class:list={["icon-link", { active: isActive("/archives") }]}
-                  title={t.nav.archives}
-                  aria-label={t.nav.archives}
-                  aria-current={isActive("/archives") ? "page" : undefined}
-                >
-                  <IconArchive class="icon-svg" aria-hidden="true" />
-                  <span class="icon-label">{t.nav.archives}</span>
-                </LinkButton>
-              </li>
-            )
-          }
-          {
-            features.search !== false && (
-              <li>
-                <LinkButton
-                  href={getRelativeLocaleUrl(locale, "search")}
-                  class:list={["icon-link", { active: isActive("/search") }]}
-                  title={t.nav.search}
-                  aria-label={t.nav.search}
-                  aria-current={isActive("/search") ? "page" : undefined}
-                >
-                  <IconSearch class="icon-svg" aria-hidden="true" />
-                  <span class="icon-label">{t.nav.search}</span>
-                </LinkButton>
-              </li>
-            )
-          }
-        </ul>
-      </nav>
-    </div>
+        </li>
+        <li>
+          <a
+            href={getRelativeLocaleUrl(locale, "tags")}
+            class:list={["nav-link", { active: isActive("/tags") }]}
+            aria-current={isActive("/tags") ? "page" : undefined}
+          >
+            {t.nav.tags}
+          </a>
+        </li>
+        <li>
+          <a
+            href={getRelativeLocaleUrl(locale, "series")}
+            class:list={["nav-link", { active: isActive("/series") }]}
+            aria-current={isActive("/series") ? "page" : undefined}
+          >
+            {t.nav.series}
+          </a>
+        </li>
+        <li>
+          <a
+            href={getRelativeLocaleUrl(locale, "about")}
+            class:list={["nav-link", { active: isActive("/about") }]}
+            aria-current={isActive("/about") ? "page" : undefined}
+          >
+            {t.nav.about}
+          </a>
+        </li>
+        {
+          features.showArchives && (
+            <li>
+              <LinkButton
+                href={getRelativeLocaleUrl(locale, "archives")}
+                class:list={["icon-link", { active: isActive("/archives") }]}
+                title={t.nav.archives}
+                aria-label={t.nav.archives}
+                aria-current={isActive("/archives") ? "page" : undefined}
+              >
+                <IconArchive class="icon-svg" aria-hidden="true" />
+                <span class="icon-label">{t.nav.archives}</span>
+              </LinkButton>
+            </li>
+          )
+        }
+        {
+          features.search !== false && (
+            <li>
+              <LinkButton
+                href={getRelativeLocaleUrl(locale, "search")}
+                class:list={["icon-link", { active: isActive("/search") }]}
+                title={t.nav.search}
+                aria-label={t.nav.search}
+                aria-current={isActive("/search") ? "page" : undefined}
+              >
+                <IconSearch class="icon-svg" aria-hidden="true" />
+                <span class="icon-label">{t.nav.search}</span>
+              </LinkButton>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
   </div>
-</header>
+</div>
 
 <script>
   function toggleNav() {
