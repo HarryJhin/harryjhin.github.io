@@ -3,7 +3,7 @@
 @layer base {
   /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
-    @apply prose font-serif prose-p:leading-[1.8] prose-li:leading-[1.8];
+    @apply prose font-sans prose-p:leading-[1.8] prose-li:leading-[1.8];
 
     h1,
     h2,
