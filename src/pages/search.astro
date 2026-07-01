@@ -129,10 +129,10 @@ const t = useTranslations(locale);
     --pagefind-ui-background: var(--background);
     --pagefind-ui-border: var(--border);
     --pagefind-ui-primary: var(--accent);
-    --pagefind-ui-tag: var(--background);
-    --pagefind-ui-border-radius: 0.375rem;
+    --pagefind-ui-tag: var(--color-chip-bg);
+    --pagefind-ui-border-radius: var(--radius-lg);
     --pagefind-ui-border-width: 1px;
-    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-border-radius: var(--radius-md);
     --pagefind-ui-image-box-ratio: 3 / 2;
 
     form::before {
@@ -145,7 +145,8 @@ const t = useTranslations(locale);
     }
 
     input:focus-visible {
-      outline: 1px solid var(--accent);
+      outline: none;
+      box-shadow: var(--focus-ring);
     }
 
     .pagefind-ui__result-title a {
