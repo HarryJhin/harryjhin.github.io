@@ -21,7 +21,7 @@ export default defineAstroPaperConfig({
     scheduledPostMargin: 15 * 60 * 1000,
   },
   features: {
-    lightAndDarkMode: true,
+    lightAndDarkMode: false,
     dynamicOgImage: true,
     showArchives: true,
     showBackButton: true,

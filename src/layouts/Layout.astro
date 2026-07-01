@@ -97,8 +97,7 @@ const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
       href={new URL(rssHref, Astro.site)}
     />
 
-    <!-- Filled at runtime by theme.ts to match the current background colour -->
-    <meta name="theme-color" content="" />
+    <meta name="theme-color" content="#FAFAFA" />
 
     <!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->
     <slot name="head" />
@@ -113,21 +112,13 @@ const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
     }
 
     <!--
-      Inline FOUC-prevention script: sets data-theme on <html> before
-      the browser paints. Runs synchronously, no defer/async.
+      Light-only theme: pin data-theme=light before paint. No dark detection.
     -->
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        const theme = stored ?? (prefersDark ? "dark" : "light");
         const root = document.firstElementChild;
-        root?.setAttribute("data-theme", theme);
-        root?.classList.toggle("dark", theme === "dark");
-        // Expose value so theme.ts can skip re-detection.
-        window.__theme = { value: theme };
+        root?.setAttribute("data-theme", "light");
+        window.__theme = { value: "light" };
       })();
     </script>
 
@@ -164,11 +155,8 @@ const rssHref = getRelativeLocaleUrl(locale, "rss.xml");
     <ClientRouter />
   </head>
   <body
-    class="bg-background font-serif text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
+    class="bg-background font-sans text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
     <slot />
-    <script>
-      import "@/scripts/theme";
-    </script>
   </body>
 </html>

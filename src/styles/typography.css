@@ -100,10 +100,6 @@
     @apply outline-border font-mono flex border bg-(--shiki-light-bg) text-(--shiki-light) [&_span]:text-(--shiki-light);
   }
 
-  html[data-theme="dark"] .astro-code {
-    @apply bg-(--shiki-dark-bg) text-(--shiki-dark) [&_span]:text-(--shiki-dark);
-  }
-
   /* Styles for Shiki transformers */
   /* https://shiki.style/packages/transformers */
   .astro-code {
