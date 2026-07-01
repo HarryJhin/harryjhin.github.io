@@ -183,13 +183,7 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     color: var(--color-text-primary);
-
-    /* The article wrapper (src/pages/posts/[...slug]/index.astro) carries
-       `prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)`.
-       That's a Tailwind utility (utilities layer), which outranks this
-       base-layer rule at equal specificity — !important is required to win
-       and land on the flat DS background regardless of color-scheme. */
-    background: var(--color-bg-alt) !important;
+    background: var(--color-bg-alt);
 
     /* transformerFileName sets --file-name-offset:-0.75rem inline on every
        pre so the (client-injected, index.astro) copy button peeks above the
