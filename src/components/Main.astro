@@ -21,8 +21,10 @@ const backUrl = config.features.showBackButton
   id="main-content"
   class:list={["app-layout pb-4", className]}
 >
-  <h1 class="font-display text-3xl font-extrabold sm:text-4xl">{pageTitle}</h1>
-  <p class="mt-2 mb-6 italic">{pageDesc}</p>
+  <header class="listing-head">
+    <h1 class="listing-title">{pageTitle}</h1>
+    {pageDesc && <p class="listing-desc">{pageDesc}</p>}
+  </header>
   <slot />
 </main>
 
@@ -36,3 +38,27 @@ const backUrl = config.features.showBackButton
     }
   });
 </script>
+
+<style>
+  .listing-head {
+    border-top: 2px solid var(--color-text-primary);
+    padding-top: var(--space-5);
+    margin-bottom: var(--space-10);
+  }
+  .listing-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: clamp(32px, 8vw, 44px);
+    letter-spacing: -0.03em;
+    color: var(--color-text-primary);
+  }
+  .listing-desc {
+    max-width: 620px;
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-deck);
+    line-height: var(--leading-deck);
+    color: var(--color-text-secondary);
+  }
+</style>

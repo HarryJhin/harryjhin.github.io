@@ -1,6 +1,5 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import IconHash from "@/assets/icons/IconHash.svg";
 import config from "@/config";
 
 type Props = {
@@ -18,22 +17,40 @@ const locale = Astro.currentLocale ?? config.site.lang;
   <a
     href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
     transition:name={tag}
-    class:list={[
-      "font-mono flex items-center gap-0.5",
-      "border-foreground border-b-2 border-dashed",
-      "hover:border-accent hover:text-accent hover:-mt-0.5",
-      "focus-visible:text-accent focus-visible:border-none",
-      { "text-sm": size === "sm" },
-      { "text-lg": size === "lg" },
-    ]}
+    class:list={["tag-chip", { "tag-chip-sm": size === "sm" }]}
   >
-    <IconHash
-      class:list={[
-        "opacity-80",
-        { "size-5": size === "lg" },
-        { "size-4": size === "sm" },
-      ]}
-    />
     {tagName}
   </a>
 </li>
+
+<style>
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    line-height: 1.4;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    background: var(--color-chip-bg);
+    color: var(--color-chip-text);
+    text-decoration: none;
+    transition:
+      background var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+  .tag-chip-sm {
+    padding: 3px 10px;
+    font-size: var(--text-caption);
+  }
+  .tag-chip:hover {
+    background: var(--color-border);
+  }
+  .tag-chip:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+</style>
