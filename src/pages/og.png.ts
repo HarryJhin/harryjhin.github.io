@@ -1,19 +1,10 @@
 import type { APIRoute } from "astro";
 import satori from "satori";
 import sharp from "sharp";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import config from "@/config";
+import { loadOgFonts } from "@/utils/ogFont";
 
-// Read the vendored otf directly instead of relying on import.meta.url:
-// Astro's build flattens this route into dist/.prerender/chunks/, which
-// breaks any path computed relative to the module's own bundled location.
-// astro build/check/dev all run from the project root, so cwd is stable.
-const ogFontURL = (name: string) =>
-  join(process.cwd(), "src/assets/fonts/pretendard/og", name);
-
-const regularData = readFileSync(ogFontURL("Pretendard-Regular.otf"));
-const boldData = readFileSync(ogFontURL("Pretendard-Bold.otf"));
+const { regular: regularData, bold: boldData } = loadOgFonts();
 
 export const GET: APIRoute = async () => {
   const svg = await satori(
