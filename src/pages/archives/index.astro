@@ -63,7 +63,7 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
                       {monthGroup.length}
                     </sup>
                   </div>
-                  <ul>
+                  <div>
                     {monthGroup
                       .sort(
                         (a, b) =>
@@ -75,9 +75,9 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
                           )
                       )
                       .map(data => (
-                        <Card {...data} />
+                        <Card post={data} />
                       ))}
-                  </ul>
+                  </div>
                 </div>
               ))}
           </div>
