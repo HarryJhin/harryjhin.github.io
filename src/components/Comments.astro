@@ -1,0 +1,67 @@
+---
+/**
+ * Giscus comments (GitHub Discussions), post detail pages only.
+ *
+ * Renders nothing unless `features.comments` is enabled AND fully configured.
+ * The widget is (re)mounted via `data-astro-rerun` so it follows client-side
+ * View Transitions navigation — matching the pattern in the post page script.
+ */
+import config from "@/config";
+
+const c = config.features.comments;
+const enabled = Boolean(
+  c.enabled && c.repo && c.repoId && c.category && c.categoryId
+);
+
+const lang = config.site.lang === "ko" ? "ko" : "en";
+---
+
+{
+  enabled && (
+    <Fragment>
+      <section class="giscus mt-16" aria-label="댓글" />
+      <script
+        is:inline
+        data-astro-rerun
+        define:vars={{
+          repo: c.repo,
+          repoId: c.repoId,
+          category: c.category,
+          categoryId: c.categoryId,
+          lang,
+        }}
+      >
+        {
+          (function () {
+            var container = document.querySelector("section.giscus");
+            if (!container) return;
+            // Clear any iframe left from a previous navigation before remount.
+            container.innerHTML = "";
+
+            // Load the theme from the current origin so it resolves in dev,
+            // preview, and production alike (not a hardcoded prod URL).
+            var themeUrl = location.origin + "/giscus-theme.css";
+
+            var s = document.createElement("script");
+            s.src = "https://giscus.app/client.js";
+            s.setAttribute("data-repo", repo);
+            s.setAttribute("data-repo-id", repoId);
+            s.setAttribute("data-category", category);
+            s.setAttribute("data-category-id", categoryId);
+            s.setAttribute("data-mapping", "pathname");
+            s.setAttribute("data-strict", "0");
+            s.setAttribute("data-reactions-enabled", "1");
+            s.setAttribute("data-emit-metadata", "0");
+            s.setAttribute("data-input-position", "bottom");
+            s.setAttribute("data-theme", themeUrl);
+            s.setAttribute("data-lang", lang);
+            s.setAttribute("data-loading", "lazy");
+            s.crossOrigin = "anonymous";
+            s.async = true;
+            container.appendChild(s);
+          })();
+        }
+      </script>
+    </Fragment>
+  )
+}

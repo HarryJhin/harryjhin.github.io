@@ -30,6 +30,17 @@ export default defineAstroPaperConfig({
       url: "https://github.com/HarryJhin/harryjhin.github.io/edit/main/",
     },
     search: "pagefind",
+    // Comments via giscus (GitHub Discussions). Discussions + category ids were
+    // provisioned via `gh api` (REST PATCH has_discussions + GraphQL categories).
+    // One manual step remains for commenting to work: install the giscus app at
+    // https://github.com/apps/giscus (GitHub App install needs OAuth web flow).
+    comments: {
+      enabled: true,
+      repo: "HarryJhin/harryjhin.github.io",
+      repoId: "R_kgDOMs0bew",
+      category: "Announcements",
+      categoryId: "DIC_kwDOMs0be84DAS2h",
+    },
   },
   socials: [
     { name: "github", url: "https://github.com/HarryJhin" },

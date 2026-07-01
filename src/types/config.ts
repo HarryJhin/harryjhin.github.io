@@ -63,6 +63,23 @@ interface FeaturesConfig {
    * Set to false to disable search entirely.
    */
   search?: "pagefind" | false;
+  /**
+   * GitHub Discussions comments via giscus (post detail pages only).
+   * Renders only when `enabled` and all of repo/repoId/category/categoryId are set.
+   * All values are public (public repo + public widget) — no secrets needed.
+   */
+  comments?: {
+    /** Master switch. */
+    enabled?: boolean;
+    /** "owner/repo", e.g. "HarryJhin/harryjhin.github.io". */
+    repo?: string;
+    /** Repository GraphQL node ID (giscus `data-repo-id`). */
+    repoId?: string;
+    /** Discussion category name (Announcements type recommended). */
+    category?: string;
+    /** Discussion category node ID (giscus `data-category-id`). */
+    categoryId?: string;
+  };
 }
 
 interface SocialLink {

@@ -18,6 +18,7 @@ import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
 import BackToTopButton from "./_components/BackToTopButton.astro";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
+import Comments from "@/components/Comments.astro";
 import SeriesNav from "@/components/SeriesNav.astro";
 import { getSeriesContext } from "@/utils/getSeries";
 import config from "@/config";
@@ -218,6 +219,8 @@ const ogImage = ogImageUrl
     <hr class="my-8 border-dashed" />
 
     <AdjacentPostNav {prevPost} {nextPost} />
+
+    <Comments />
   </main>
   <Footer />
 </PostLayout>
