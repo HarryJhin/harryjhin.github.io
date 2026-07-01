@@ -131,24 +131,54 @@ export default defineConfig({
   },
   fonts: [
     {
-      name: "Google Sans Code",
-      cssVariable: "--font-google-sans-code",
-      provider: fontProviders.google(),
-      fallbacks: ["monospace"],
-      weights: [300, 400, 500, 600, 700],
-      styles: ["normal", "italic"],
-      formats: ["woff", "ttf"],
+      name: "Pretendard",
+      cssVariable: "--font-pretendard",
+      provider: fontProviders.local(),
+      fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"],
+      options: {
+        variants: [
+          {
+            weight: 400,
+            style: "normal",
+            src: ["./src/assets/fonts/pretendard/Pretendard-Regular.subset.woff2"],
+          },
+          {
+            weight: 500,
+            style: "normal",
+            src: ["./src/assets/fonts/pretendard/Pretendard-Medium.subset.woff2"],
+          },
+          {
+            weight: 700,
+            style: "normal",
+            src: ["./src/assets/fonts/pretendard/Pretendard-Bold.subset.woff2"],
+          },
+        ],
+      },
     },
     {
-      name: "Newsreader",
-      cssVariable: "--font-newsreader",
-      provider: fontProviders.google(),
-      // Latin body + headlines. Korean glyphs fall through to the OS serif
-      // (generic `serif` in the token), so no Korean webfont is shipped.
-      fallbacks: ["Georgia", "serif"],
-      weights: [400, 600, 800],
-      styles: ["normal", "italic"],
-      formats: ["woff", "ttf"],
+      name: "JetBrains Mono",
+      cssVariable: "--font-jetbrains-mono",
+      provider: fontProviders.local(),
+      fallbacks: ["ui-monospace", "monospace"],
+      options: {
+        variants: [
+          {
+            weight: 400,
+            style: "normal",
+            src: ["./src/assets/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2"],
+          },
+          {
+            weight: 500,
+            style: "normal",
+            src: ["./src/assets/fonts/jetbrains-mono/JetBrainsMono-Medium.woff2"],
+          },
+          {
+            weight: 700,
+            style: "normal",
+            src: ["./src/assets/fonts/jetbrains-mono/JetBrainsMono-Bold.woff2"],
+          },
+        ],
+      },
     },
   ],
   env: {
