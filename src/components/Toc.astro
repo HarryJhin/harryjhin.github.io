@@ -1,0 +1,67 @@
+---
+interface Props {
+  items: { id: string; label: string }[];
+  title?: string;
+  class?: string;
+}
+const { items, title = "목차", class: cls } = Astro.props;
+---
+
+{
+  items && items.length >= 2 && (
+    <nav class:list={["toc", cls]} aria-label={title}>
+      <p class="toc-title">{title}</p>
+      <ol class="toc-list">
+        {items.map((item, index) => (
+          <li>
+            <a href={`#${item.id}`}>
+              <span class="toc-num">{String(index + 1).padStart(2, "0")}</span>
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    border-left: 2px solid var(--color-border);
+    padding: 2px 0 2px 16px;
+  }
+  .toc-title {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-sans);
+    font-size: var(--text-kicker);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-muted);
+  }
+  .toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .toc-list a {
+    display: flex;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    line-height: 1.4;
+    text-decoration: none;
+    color: var(--color-text-secondary);
+  }
+  .toc-list a:hover {
+    color: var(--color-primary);
+  }
+  .toc-num {
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+</style>
