@@ -1,4 +1,4 @@
-/* Register design tokens for Tailwind v4 */
+/* Register design tokens for Tailwind v4 — The JVM Index (Claude Design) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -7,33 +7,74 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  /* Typographic voices:
-     - serif  → reading voice (masthead, headlines, article body, index titles)
-     - mono   → utility voice (code, datelines, kickers, tags, numerals) */
-  --font-mono: var(--font-google-sans-code);
-  --font-serif: var(--font-newsreader), Georgia, serif;
-  --font-headline: var(--font-newsreader), Georgia, serif;
+
+  /* DS interactive + neutrals (light-only) */
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-surface: #ffffff;
+  --color-bg-alt: #f4f4f5;
+  --color-text-primary: #0a0a0a;
+  --color-text-secondary: #6b6b6b;
+  --color-text-muted: #9c9c9c;
+  --color-chip-bg: #f4f4f5;
+  --color-chip-text: #52525b;
+
+  /* Semantic */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-success-soft: #ecfdf5;
+  --color-success-text: #047857;
+  --color-warning-soft: #fffbeb;
+  --color-warning-text: #b45309;
+  --color-error-soft: #fef2f2;
+  --color-error-text: #b91c1c;
+
+  /* Section accents (non-interactive category coding) */
+  --color-section-jvm: #475569;
+  --color-section-java: #b45309;
+  --color-section-kotlin: #c026d3;
+  --color-section-gradle: #0e7490;
+  --color-section-spring: #15803d;
+  --color-section-cloud: #0369a1;
+  --color-section-web: #be123c;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Fonts (families wired in Task 4) */
+  --font-sans: var(--font-pretendard), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-pretendard), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
-/* Light theme values — neutrals tinted toward the cool brand hue (~250) */
+/* Non-Tailwind design tokens (rings, glow, elevation, motion) */
+:root {
+  --ring-primary: rgba(99, 102, 241, 0.12);
+  --glow-primary: rgba(99, 102, 241, 0.35);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --shadow-primary-glow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --lift-card: -2px;
+  --lift-button: -1px;
+}
+
+/* Light theme only — no dark palette by design */
 :root,
 [data-theme="light"] {
-  --background: oklch(99.4% 0.003 250);
-  --foreground: oklch(27.4% 0.004 264);
-  --accent: oklch(51.4% 0.13 245);
-  --accent-foreground: oklch(99% 0.004 250);
-  --muted: oklch(92.5% 0.004 250);
-  --muted-foreground: oklch(55.1% 0.023 264);
-  --border: oklch(93.6% 0.004 250);
-}
-
-/* Dark theme values — "night edition": warm amber accent, neutral slate rules */
-[data-theme="dark"] {
-  --background: oklch(27.4% 0.031 268);
-  --foreground: oklch(94.6% 0.009 264);
-  --accent: oklch(75% 0.122 57);
-  --accent-foreground: oklch(20.8% 0.037 73);
-  --muted: oklch(37.3% 0.059 269);
-  --muted-foreground: oklch(78.3% 0.027 261);
-  --border: oklch(38.2% 0.045 269);
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --accent: #6366f1;
+  --accent-foreground: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #6b6b6b;
+  --border: #e8e8ec;
 }
