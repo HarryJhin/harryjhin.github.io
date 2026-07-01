@@ -46,6 +46,62 @@
   --radius-lg: 12px;
   --radius-full: 9999px;
 
+  /* Type scale (px) — dense UI scale */
+  --text-display: 72px;
+  --text-headline: 60px;
+  --text-section: 32px;
+  --text-subhead: 24px;
+  --text-body-lg: 17px;
+  --text-body-md: 15px;
+  --text-body-sm: 14px;
+  --text-small: 13px;
+  --text-caption: 12px;
+  --text-overline: 11px;
+
+  /* Editorial / reading scale */
+  --text-masthead: 30px;
+  --text-lead-hed: 56px;
+  --text-article-hed: 44px;
+  --text-deck: 21px;
+  --text-read: 19px;
+  --text-read-sm: 17px;
+  --text-kicker: 12px;
+  --text-byline: 13px;
+
+  /* Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Line heights */
+  --leading-tight: 1.05;
+  --leading-snug: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --leading-read: 1.75;
+  --leading-deck: 1.45;
+
+  /* Letter spacing */
+  --tracking-display: -0.04em;
+  --tracking-heading: -0.03em;
+  --tracking-normal: 0;
+  --tracking-overline: 0.08em;
+
+  /* Spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
   /* Fonts (families wired in Task 4) */
   --font-sans: var(--font-pretendard), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-pretendard), ui-sans-serif, system-ui, sans-serif;
