@@ -19,12 +19,12 @@ const t = useTranslations(locale);
     class="app-layout flex flex-1 items-center justify-center"
   >
     <div class="mb-14 flex flex-col items-center justify-center">
-      <h1 class="text-accent text-9xl font-bold">404</h1>
+      <h1 class="not-found-code">404</h1>
       <span aria-hidden="true"> ¯\_(ツ)_/¯ </span>
-      <p class="mt-4 text-2xl sm:text-3xl">{t.notFound.message}</p>
+      <p class="not-found-message">{t.notFound.message}</p>
       <LinkButton
         href={getRelativeLocaleUrl(locale, "")}
-        class="my-6 text-lg underline decoration-dashed underline-offset-8"
+        class="not-found-home my-6 text-lg underline decoration-dashed underline-offset-8"
       >
         {t.notFound.goHome}
       </LinkButton>
@@ -33,3 +33,27 @@ const t = useTranslations(locale);
 
   <Footer />
 </Layout>
+
+<style>
+  .not-found-code {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: clamp(96px, 20vw, 160px);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--color-text-primary);
+  }
+  .not-found-message {
+    margin-top: var(--space-4);
+    font-family: var(--font-sans);
+    font-size: var(--text-deck);
+    color: var(--color-text-secondary);
+  }
+  .not-found-home {
+    color: var(--color-primary);
+  }
+  .not-found-home:hover {
+    color: var(--color-primary-hover);
+  }
+</style>

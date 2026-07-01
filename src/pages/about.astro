@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
+import AuthorCard from "@/components/AuthorCard.astro";
 import config from "@/config";
 
 const about = await getEntry("pages", "about");
@@ -30,7 +31,19 @@ const { Content } = await render(about);
 
   <Main pageTitle={about.data.title} class="app-prose">
     <Content />
+    <AuthorCard
+      class="about-author"
+      name={config.site.author}
+      role="JVM 개발자 · The JVM Index 운영"
+      bio="Java와 Kotlin으로 백엔드를 만들고, JVM 생태계의 변화를 기록합니다."
+    />
   </Main>
 
   <Footer />
 </Layout>
+
+<style>
+  .about-author {
+    margin-top: var(--space-8);
+  }
+</style>
