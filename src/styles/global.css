@@ -27,10 +27,6 @@
   @apply max-w-app mx-auto w-full px-4;
 }
 
-@utility active-nav {
-  @apply underline decoration-wavy decoration-2 underline-offset-8;
-}
-
 :target {
   scroll-margin-block: 1rem;
 }
