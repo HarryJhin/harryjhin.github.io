@@ -1,0 +1,118 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Card from "@/components/Card.astro";
+import Footer from "@/components/Footer.astro";
+import Pagination from "@/components/Pagination.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { sectionAccent, sectionLabel, sectionBlurb } from "@/utils/sectionMeta";
+import config from "@/config";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  const sorted = getSortedPosts(posts);
+
+  return config.sections.flatMap(s => {
+    const inSection = sorted.filter(post => post.data.section === s.id);
+    return paginate(inSection, {
+      params: { section: s.id },
+      pageSize: config.posts.perPage,
+    });
+  });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const { section } = Astro.params;
+
+const accent = sectionAccent(section);
+const label = sectionLabel(section);
+const blurb = sectionBlurb(section);
+
+const [lead, ...rest] = page.data;
+---
+
+<Layout title={`${label} | ${config.site.title}`}>
+  <Header />
+
+  <main id="main-content" class="app-layout py-8">
+    <header class="section-head" style={`--accent:${accent}`}>
+      <div class="section-head-row">
+        <h1 class="section-title">{label}</h1>
+        <span class="section-count">{page.total}개 기사</span>
+      </div>
+      {blurb && <p class="section-blurb">{blurb}</p>}
+    </header>
+
+    {
+      lead && (
+        <div class:list={["lead-wrap", { bordered: rest.length > 0 }]}>
+          <Card post={lead} variant="lead" />
+        </div>
+      )
+    }
+    {
+      rest.length > 0 && (
+        <ul class="grid">
+          {rest.map(post => (
+            <li>
+              <Card post={post} />
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </main>
+
+  <Pagination {page} />
+
+  <Footer noMarginTop={page.lastPage > 1} />
+</Layout>
+
+<style>
+  .section-head {
+    border-top: 3px solid var(--accent);
+    padding-top: var(--space-5);
+    margin-bottom: var(--space-10);
+  }
+  .section-head-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .section-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: clamp(36px, 10vw, 56px);
+    letter-spacing: -0.04em;
+    color: var(--color-text-primary);
+  }
+  .section-count {
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+  .section-blurb {
+    max-width: 620px;
+    margin: var(--space-3) 0 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-deck);
+    line-height: var(--leading-deck);
+    color: var(--color-text-secondary);
+  }
+  .lead-wrap.bordered {
+    padding-bottom: var(--space-10);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-10);
+  }
+</style>

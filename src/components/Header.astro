@@ -130,11 +130,16 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
       <ul id="menu-items" class="hidden menu-items">
         {
           config.sections.map(s => {
-            const active = currentSection === s.id;
+            // Active when viewing a post in this section, or the section's own
+            // listing page (`/posts/{id}` or a later `/posts/{id}/{page}`).
+            const isSectionPage =
+              currentPath === `/posts/${s.id}` ||
+              currentPath.startsWith(`/posts/${s.id}/`);
+            const active = currentSection === s.id || isSectionPage;
             return (
               <li class="pill-item">
                 <a
-                  href={`${homeHref}#section-${s.id}`}
+                  href={getRelativeLocaleUrl(locale, `posts/${s.id}`)}
                   class="pill-link"
                   aria-current={active ? "page" : undefined}
                 >
