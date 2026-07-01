@@ -1,0 +1,106 @@
+---
+interface Props {
+  checked?: boolean;
+  disabled?: boolean;
+  name?: string;
+  value?: string;
+  label?: string;
+  class?: string;
+}
+const {
+  checked = false,
+  disabled = false,
+  name,
+  value,
+  label,
+  class: cls,
+  ...attrs
+} = Astro.props;
+
+const hasSlot = Astro.slots.has("default");
+---
+
+<label class:list={["ds-switch", disabled && "disabled", cls]}>
+  <input
+    type="checkbox"
+    class="ds-switch-input"
+    checked={checked}
+    disabled={disabled}
+    name={name}
+    value={value}
+    {...attrs}
+  />
+  <span class="track" aria-hidden="true">
+    <span class="knob" />
+  </span>
+  {
+    hasSlot ? (
+      <span class="text">
+        <slot />
+      </span>
+    ) : (
+      label && <span class="text">{label}</span>
+    )
+  }
+</label>
+
+<style>
+  .ds-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ds-switch.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .ds-switch-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .track {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background: #e4e4e7; /* DS literal — switch off track */
+    transition: background var(--duration-base) var(--ease-standard);
+  }
+
+  .knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    background: #ffffff; /* DS literal — switch knob */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); /* DS literal — switch knob shadow */
+    transition: left var(--duration-base) var(--ease-standard);
+  }
+
+  .ds-switch-input:checked + .track {
+    background: var(--color-primary);
+  }
+
+  .ds-switch-input:checked + .track .knob {
+    left: 18px;
+  }
+
+  .ds-switch-input:focus-visible + .track {
+    box-shadow: var(--focus-ring);
+  }
+</style>

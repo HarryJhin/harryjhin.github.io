@@ -1,0 +1,97 @@
+---
+interface Props {
+  type?: string;
+  value?: string;
+  placeholder?: string;
+  error?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+const {
+  type = "text",
+  value,
+  placeholder,
+  error = false,
+  disabled = false,
+  class: cls,
+  ...attrs
+} = Astro.props;
+
+const hasIcon = Astro.slots.has("icon");
+---
+
+<div class="ds-input-wrap">
+  {
+    hasIcon && (
+      <span class="icon" aria-hidden="true">
+        <slot name="icon" />
+      </span>
+    )
+  }
+  <input
+    type={type as any}
+    value={value}
+    placeholder={placeholder}
+    disabled={disabled}
+    class:list={["ds-input", error && "error", hasIcon && "has-icon", cls]}
+    {...attrs}
+  />
+</div>
+
+<style>
+  .ds-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .icon {
+    position: absolute;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+
+  .ds-input {
+    width: 100%;
+    height: 38px;
+    padding: 10px 14px;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    outline: none;
+    box-sizing: border-box;
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-input.has-icon {
+    padding-left: 36px;
+  }
+
+  .ds-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: var(--focus-ring);
+  }
+
+  .ds-input:disabled {
+    background: var(--color-bg-alt);
+  }
+
+  .ds-input.error {
+    border-color: var(--color-error);
+  }
+
+  .ds-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12); /* DS literal — error focus ring */
+  }
+</style>

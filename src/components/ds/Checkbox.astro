@@ -1,0 +1,113 @@
+---
+interface Props {
+  checked?: boolean;
+  disabled?: boolean;
+  name?: string;
+  value?: string;
+  label?: string;
+  class?: string;
+}
+const {
+  checked = false,
+  disabled = false,
+  name,
+  value,
+  label,
+  class: cls,
+  ...attrs
+} = Astro.props;
+
+const hasSlot = Astro.slots.has("default");
+---
+
+<label class:list={["ds-checkbox", disabled && "disabled", cls]}>
+  <input
+    type="checkbox"
+    class="ds-checkbox-input"
+    checked={checked}
+    disabled={disabled}
+    name={name}
+    value={value}
+    {...attrs}
+  />
+  <span class="box" aria-hidden="true">
+    {/* DS literal — check mark stroke #FFFFFF */}
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  </span>
+  {
+    hasSlot ? (
+      <span class="text">
+        <slot />
+      </span>
+    ) : (
+      label && <span class="text">{label}</span>
+    )
+  }
+</label>
+
+<style>
+  .ds-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ds-checkbox.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .ds-checkbox-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-full);
+    background: #e4e4e7; /* DS literal — checkbox unchecked fill */
+    transition: background var(--duration-fast) var(--ease-standard);
+  }
+
+  .box svg {
+    width: 12px;
+    height: 12px;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-checkbox-input:checked + .box {
+    background: var(--color-primary);
+  }
+
+  .ds-checkbox-input:checked + .box svg {
+    opacity: 1;
+  }
+
+  .ds-checkbox-input:focus-visible + .box {
+    box-shadow: var(--focus-ring);
+  }
+</style>

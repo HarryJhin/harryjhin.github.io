@@ -1,0 +1,101 @@
+---
+interface Option {
+  value: string;
+  label: string;
+}
+interface Props {
+  value?: string;
+  options?: (string | Option)[];
+  error?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+const {
+  value,
+  options = [],
+  error = false,
+  disabled = false,
+  class: cls,
+  ...attrs
+} = Astro.props;
+
+const normalized: Option[] = options.map((opt) =>
+  typeof opt === "string" ? { value: opt, label: opt } : opt
+);
+---
+
+<div class="ds-select-wrap">
+  <select disabled={disabled} class:list={["ds-select", error && "error", cls]} {...attrs}>
+    {
+      normalized.map((opt) => (
+        <option value={opt.value} selected={opt.value === value}>
+          {opt.label}
+        </option>
+      ))
+    }
+  </select>
+  <span class="chevron" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </span>
+</div>
+
+<style>
+  .ds-select-wrap {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+  }
+
+  .ds-select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 38px;
+    padding: 10px 36px 10px 14px;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    outline: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: var(--focus-ring);
+  }
+
+  .ds-select:disabled {
+    background: var(--color-bg-alt);
+  }
+
+  .ds-select.error {
+    border-color: var(--color-error);
+  }
+
+  .chevron {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+</style>
