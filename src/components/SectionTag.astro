@@ -1,0 +1,72 @@
+---
+import { sectionAccent, hasAccent } from "@/utils/sectionMeta";
+
+interface Props {
+  section?: string;
+  active?: boolean;
+  dot?: boolean;
+  href?: string;
+  class?: string;
+}
+const { section, active = false, dot = true, href, class: cls } = Astro.props;
+const accent = sectionAccent(section);
+const showDot = dot && hasAccent(section);
+const Tag = href ? "a" : "span";
+---
+
+<Tag
+  class:list={["section-tag", { active, interactive: !!href }, cls]}
+  href={href}
+  style={`--accent:${accent}`}
+  aria-pressed={href ? (active ? "true" : "false") : undefined}
+>
+  {showDot && <span class="dot" aria-hidden="true"></span>}
+  <slot />
+</Tag>
+
+<style>
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 12px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-full);
+    background: var(--color-chip-bg);
+    color: var(--color-chip-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    line-height: 1.4;
+    white-space: nowrap;
+    text-decoration: none;
+    user-select: none;
+    transition:
+      background var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+  .section-tag.interactive {
+    cursor: pointer;
+  }
+  .section-tag.interactive:hover {
+    background: var(--color-border);
+  }
+  .section-tag.interactive:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+  .section-tag.active {
+    background: color-mix(in srgb, var(--accent) 12%, #fff);
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 32%, #fff);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+</style>
