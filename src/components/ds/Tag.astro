@@ -1,0 +1,70 @@
+---
+interface Props {
+  active?: boolean;
+  href?: string;
+  interactive?: boolean;
+  class?: string;
+}
+const { active = false, href, interactive = false, class: cls, ...attrs } = Astro.props;
+
+const isLink = Boolean(href);
+const isButton = !isLink && interactive;
+const classes = ["ds-tag", active && "active", (isLink || isButton) && "interactive", cls];
+---
+
+{
+  isLink ? (
+    <a href={href} class:list={classes} aria-current={active ? "page" : undefined} {...attrs}>
+      <slot />
+    </a>
+  ) : isButton ? (
+    <button type="button" class:list={classes} aria-pressed={active} {...attrs}>
+      <slot />
+    </button>
+  ) : (
+    <span class:list={classes} {...attrs}>
+      <slot />
+    </span>
+  )
+}
+
+<style>
+  .ds-tag {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 4px 12px;
+    font-family: var(--font-sans);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    line-height: 1.4;
+    border: none;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    user-select: none;
+    background: var(--color-chip-bg);
+    color: var(--color-chip-text);
+    text-decoration: none;
+    cursor: default;
+    transition:
+      background var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-tag.active {
+    background: var(--color-primary);
+    color: #fff; /* DS literal — white text on primary fill */
+  }
+
+  .ds-tag.interactive {
+    cursor: pointer;
+  }
+  .ds-tag.interactive:hover {
+    background: var(--color-border);
+  }
+  .ds-tag.interactive:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+</style>

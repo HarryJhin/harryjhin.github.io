@@ -1,0 +1,90 @@
+---
+interface Props {
+  src?: string;
+  name?: string;
+  size?: "xs" | "sm" | "md" | "lg";
+  status?: "online" | "away" | "offline";
+  class?: string;
+}
+const { src, name = "", size = "md", status, class: cls, ...attrs } = Astro.props;
+
+const DIMS = { xs: 20, sm: 28, md: 36, lg: 48 } as const;
+const dims = DIMS[size];
+const fontSize = Math.round(dims * 0.38);
+const dotSize = Math.max(8, Math.round(dims * 0.28));
+
+const initials =
+  name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(w => w[0])
+    .join("")
+    .toUpperCase() || "?";
+---
+
+<span class:list={["ds-avatar", cls]} style={`--dims:${dims}px`} {...attrs}>
+  <span class="circle" style={`--fs:${fontSize}px`}>
+    {src ? <img src={src} alt={name} /> : initials}
+  </span>
+  {
+    status && (
+      <span
+        class:list={["status-dot", `status-${status}`]}
+        style={`--dot-size:${dotSize}px`}
+        aria-hidden="true"
+      />
+    )
+  }
+</span>
+
+<style>
+  .ds-avatar {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    width: var(--dims);
+    height: var(--dims);
+  }
+
+  .circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-alt);
+    color: var(--color-text-secondary);
+    font-family: var(--font-sans);
+    font-size: var(--fs);
+    font-weight: var(--weight-medium);
+    border: 1px solid var(--color-border);
+  }
+  .circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .status-dot {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-surface);
+  }
+  .status-online {
+    background: var(--color-success);
+  }
+  .status-away {
+    background: var(--color-warning);
+  }
+  .status-offline {
+    background: var(--color-text-muted);
+  }
+</style>

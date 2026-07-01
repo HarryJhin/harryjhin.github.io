@@ -1,0 +1,64 @@
+---
+interface Props {
+  status?: "published" | "pending" | "rejected" | "info" | "neutral";
+  dot?: boolean;
+  class?: string;
+}
+const { status = "neutral", dot = true, class: cls, ...attrs } = Astro.props;
+---
+
+<span class:list={["ds-badge", `status-${status}`, cls]} {...attrs}>
+  {dot && <span class="dot" aria-hidden="true" />}
+  <slot />
+</span>
+
+<style>
+  .ds-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 4px 12px;
+    font-family: var(--font-sans);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    line-height: 1.4;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  .status-published {
+    --bg: var(--color-success-soft);
+    --fg: var(--color-success-text);
+    --dot: var(--color-success);
+  }
+  .status-pending {
+    --bg: var(--color-warning-soft);
+    --fg: var(--color-warning-text);
+    --dot: var(--color-warning);
+  }
+  .status-rejected {
+    --bg: var(--color-error-soft);
+    --fg: var(--color-error-text);
+    --dot: var(--color-error);
+  }
+  .status-info {
+    --bg: var(--color-bg-alt);
+    --fg: var(--color-primary-hover);
+    --dot: var(--color-primary);
+  }
+  .status-neutral {
+    --bg: var(--color-chip-bg);
+    --fg: var(--color-chip-text);
+    --dot: var(--color-text-muted);
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background: var(--dot);
+  }
+</style>
