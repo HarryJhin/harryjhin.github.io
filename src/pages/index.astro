@@ -4,8 +4,7 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import LeadStory from "@/components/LeadStory.astro";
-import SectionIndex from "@/components/SectionIndex.astro";
+import Card from "@/components/Card.astro";
 import JsonLd from "@/components/JsonLd.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { getPersonSchema } from "@/utils/getPersonSchema";
@@ -16,6 +15,9 @@ const locale = Astro.currentLocale ?? config.site.lang;
 const posts = await getCollection("posts");
 const sorted = getSortedPosts(posts);
 const lead = sorted.find(({ data }) => data.featured) ?? sorted[0];
+const rest = sorted.filter(post => post.id !== lead?.id);
+const secondary = rest.slice(0, 3);
+const feed = rest.slice(3);
 
 const homePath = getRelativeLocaleUrl(locale, "");
 const homeUrl = new URL(homePath, Astro.site).href;
@@ -52,11 +54,79 @@ const websiteSchema = {
     data-home-path={homePath}
     class="app-layout flex flex-col gap-8 py-8"
   >
-    {lead && <LeadStory post={lead} />}
-    <SectionIndex posts={posts} excludeIds={lead ? [lead.id] : []} />
+    {
+      lead && (
+        <section class="lead-grid">
+          <Card post={lead} variant="lead" />
+          <ul class="lead-secondary">
+            {secondary.map(post => (
+              <li class="secondary-item">
+                <Card post={post} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    {
+      feed.length > 0 && (
+        <section class="feed-section">
+          <div class="feed-kicker">더 읽기</div>
+          <ul class="feed-grid">
+            {feed.map(post => (
+              <li>
+                <Card post={post} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .lead-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: start;
+    padding-bottom: var(--space-10);
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (min-width: 768px) {
+    .lead-grid {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+  .lead-secondary {
+    display: flex;
+    flex-direction: column;
+  }
+  .secondary-item + .secondary-item {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .feed-section {
+    margin-top: var(--space-10);
+  }
+  .feed-kicker {
+    font-family: var(--font-sans);
+    font-size: var(--text-kicker);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-5);
+  }
+  .feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-8);
+  }
+</style>
 
 <script>
   document.addEventListener("astro:page-load", () => {
