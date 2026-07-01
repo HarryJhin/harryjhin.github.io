@@ -1,14 +1,18 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Datetime from "@/components/Datetime.astro";
+import Byline from "@/components/Byline.astro";
+import AuthorCard from "@/components/AuthorCard.astro";
+import Card from "@/components/Card.astro";
 import Tag from "@/components/Tag.astro";
 import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
+import { sectionAccent, sectionLabel } from "@/utils/sectionMeta";
 import EditPost from "./_components/EditPost.astro";
 import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
@@ -80,6 +84,23 @@ const { Content } = await render(post);
 const allPosts = await getCollection("posts");
 const seriesContext = getSeriesContext(post, allPosts);
 
+// "이어서 읽기": same-section posts first, padded out with recent posts.
+const otherPosts = getSortedPosts(allPosts).filter(p => p.id !== post.id);
+const sameSectionPosts = section
+  ? otherPosts.filter(p => p.data.section === section)
+  : [];
+const restPosts = otherPosts.filter(p => !sameSectionPosts.includes(p));
+const relatedPosts = [...sameSectionPosts, ...restPosts].slice(0, 3);
+
+const bylineDate = new Intl.DateTimeFormat(locale, {
+  dateStyle: "long",
+  timeZone: timezone ?? config.site.timezone,
+}).format(pubDatetime);
+
+const authorRole = "Spring 백엔드 개발자 · The JVM Index 운영";
+const authorBio =
+  "JVM · Spring · Kotlin 생태계와 클라우드 네이티브 스택을 백엔드 개발자의 시선으로 기록합니다.";
+
 let ogImageUrl: string | undefined;
 
 if (typeof initOgImage === "string") {
@@ -122,35 +143,38 @@ const ogImage = ogImageUrl
   >
     {
       section && (
-        <div class="text-accent text-xs font-bold tracking-widest uppercase">
-          {section}
-        </div>
+        <a
+          href={getRelativeLocaleUrl(locale, `posts/${section}`)}
+          class="article-kicker"
+          style={`--accent: ${sectionAccent(section)}`}
+        >
+          <span class="dot" aria-hidden="true" />
+          {sectionLabel(section)}
+        </a>
       )
     }
     <h1
       style={{ viewTransitionName: toTransitionName(title) }}
-      class="font-display inline-block text-3xl font-extrabold sm:text-4xl"
+      class="article-hed"
     >
       {title}
     </h1>
 
-    <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
-        class:list={[
-          "text-muted-foreground max-sm:hidden",
-          { hidden: !config.features.editPost?.enabled || hideEditPost },
-        ]}
-      >
-        |
-      </span>
+    <p class="article-deck">{description}</p>
+
+    <div class="byline-row">
+      <Byline size="lg" author={config.site.author} date={bylineDate} />
+      <time datetime={pubDatetime.toISOString()} class="sr-only">
+        {bylineDate}
+      </time>
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
+    <div class="byline-rule" />
 
     <article
       id="article"
       class:list={["mt-8 w-full", "app-prose max-w-app"]}
+      style={`--accent: ${sectionAccent(section)}`}
     >
       <Content />
     </article>
@@ -169,12 +193,109 @@ const ogImage = ogImageUrl
 
     <ShareLinks />
 
+    <AuthorCard
+      name={config.site.author}
+      role={authorRole}
+      bio={authorBio}
+      class="my-8"
+    />
+
+    {
+      relatedPosts.length > 0 && (
+        <section class="related-section" aria-label="이어서 읽기">
+          <div class="related-kicker">이어서 읽기</div>
+          <ul class="related-grid">
+            {relatedPosts.map(p => (
+              <li>
+                <Card post={p} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
     <hr class="my-8 border-dashed" />
 
     <AdjacentPostNav {prevPost} {nextPost} />
   </main>
   <Footer />
 </PostLayout>
+
+<style>
+  .article-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: var(--space-3);
+    font-family: var(--font-sans);
+    font-size: var(--text-kicker);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .article-kicker .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+  }
+  .article-hed {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: clamp(28px, 7vw, 44px);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--color-text-primary);
+  }
+  .article-deck {
+    margin-top: var(--space-4);
+    font-family: var(--font-sans);
+    font-size: var(--text-deck);
+    line-height: var(--leading-deck);
+    color: var(--color-text-secondary);
+  }
+  .byline-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .byline-rule {
+    height: 1px;
+    margin-top: var(--space-6);
+    background: var(--color-border);
+  }
+  .related-section {
+    margin-top: var(--space-10);
+    padding-top: var(--space-8);
+    border-top: 2px solid var(--color-text-primary);
+  }
+  .related-kicker {
+    margin-bottom: var(--space-5);
+    font-family: var(--font-sans);
+    font-size: var(--text-kicker);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-8);
+  }
+  /* The preserved inline script below adds a "#" heading-link to every
+     h2-h6 in the document (not scoped to #article), which would otherwise
+     land inside Card's own <h3>/<a> here as an invalid nested anchor. */
+  .related-grid :global(.heading-link) {
+    display: none;
+  }
+</style>
 
 <script is:inline data-astro-rerun>
   function createProgressBar() {
