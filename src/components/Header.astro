@@ -24,12 +24,13 @@ const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 const homeHref = getRelativeLocaleUrl(locale, "");
 
+const publishedPosts = (await getCollection("posts")).filter(postFilter);
+
 // Masthead edition line (home only)
 let issueNo = 0;
 let editionDate = "";
 if (variant === "home") {
-  const posts = (await getCollection("posts")).filter(postFilter);
-  issueNo = posts.length;
+  issueNo = publishedPosts.length;
   editionDate = new Intl.DateTimeFormat("en-CA", {
     year: "numeric",
     month: "2-digit",
@@ -37,6 +38,22 @@ if (variant === "home") {
     timeZone: config.site.timezone,
   }).format(new Date());
 }
+
+// Sections with 0 published posts (e.g. "jvm" until its first article lands)
+// are hidden from the nav pins and masthead kicker — config.sections itself
+// stays as-is so the section is ready to appear the moment it has a post.
+const sectionPostCounts = new Map<string, number>();
+for (const post of publishedPosts) {
+  if (post.data.section) {
+    sectionPostCounts.set(
+      post.data.section,
+      (sectionPostCounts.get(post.data.section) ?? 0) + 1
+    );
+  }
+}
+const visibleSections = config.sections.filter(
+  s => (sectionPostCounts.get(s.id) ?? 0) > 0
+);
 
 // Strip the base prefix so isActive comparisons work regardless of deploy subdirectory.
 // e.g. with base "/blog": "/blog/posts/slug" → "/posts/slug"
@@ -54,6 +71,13 @@ const isActive = (path: string) => {
   return currentPath === path || currentPathArray[0] === pathArray[0];
 };
 
+// The "전체글/Posts" link is current only on the true all-posts listing
+// (/posts, /posts/2, ...) — isActive's first-segment match would otherwise
+// also mark it current on /posts/{section} and /posts/{slug} pages, doubling
+// up with the section pill's own aria-current="page".
+const isPostsIndexActive =
+  currentPath === "/posts" || /^\/posts\/\d+$/.test(currentPath);
+
 // On a post's own page, light up that post's section pill in the nav below.
 let currentSection: string | undefined;
 if (currentPath.startsWith("/posts/")) {
@@ -69,8 +93,8 @@ const titleWords = site.title.split(" ");
 const titleAccent = titleWords.at(-1);
 const titleLead = titleWords.slice(0, -1).join(" ");
 
-// Bottom masthead kicker — driven by the configured sections, not a hardcoded list.
-const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · ");
+// Bottom masthead kicker — driven by the visible sections, not a hardcoded list.
+const sectionKicker = visibleSections.map(s => s.label.toUpperCase()).join(" · ");
 ---
 
 <a id="skip-to-content" href="#main-content" class="skip-link">
@@ -129,7 +153,7 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
       </button>
       <ul id="menu-items" class="hidden menu-items">
         {
-          config.sections.map(s => {
+          visibleSections.map(s => {
             // Active when viewing a post in this section, or the section's own
             // listing page (`/posts/{id}` or a later `/posts/{id}/{page}`).
             const isSectionPage =
@@ -154,8 +178,8 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
         <li class="nav-start">
           <a
             href={getRelativeLocaleUrl(locale, "posts")}
-            class:list={["nav-link", { active: isActive("/posts") }]}
-            aria-current={isActive("/posts") ? "page" : undefined}
+            class:list={["nav-link", { active: isPostsIndexActive }]}
+            aria-current={isPostsIndexActive ? "page" : undefined}
           >
             {t.nav.posts}
           </a>

@@ -16,6 +16,8 @@ export const getStaticPaths = (async ({ paginate }) => {
 
   return config.sections.flatMap(s => {
     const inSection = sorted.filter(post => post.data.section === s.id);
+    // Skip sections with 0 posts (e.g. "jvm") — no thin indexable page for them.
+    if (inSection.length === 0) return [];
     return paginate(inSection, {
       params: { section: s.id },
       pageSize: config.posts.perPage,
@@ -61,11 +63,6 @@ const [lead, ...rest] = page.data;
             </li>
           ))}
         </ul>
-      )
-    }
-    {
-      page.data.length === 0 && (
-        <p class="empty-state">아직 이 섹션에 게시된 글이 없습니다.</p>
       )
     }
   </main>
@@ -119,12 +116,5 @@ const [lead, ...rest] = page.data;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: var(--space-8);
     margin-top: var(--space-10);
-  }
-  .empty-state {
-    font-family: var(--font-sans);
-    font-size: var(--text-read);
-    color: var(--color-text-muted);
-    padding: var(--space-12) 0;
-    text-align: center;
   }
 </style>
