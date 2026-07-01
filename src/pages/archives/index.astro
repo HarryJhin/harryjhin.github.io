@@ -33,59 +33,132 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
   <Breadcrumb />
 
   <Main pageTitle={t.pages.archivesTitle} pageDesc={t.pages.archivesDesc}>
-    {
-      Object.entries(
-        getPostsByGroupCondition(filteredPosts, post =>
-          post.data.pubDatetime.getFullYear()
+    <div class="archive-groups">
+      {
+        Object.entries(
+          getPostsByGroupCondition(filteredPosts, post =>
+            post.data.pubDatetime.getFullYear()
+          )
         )
-      )
-        .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
-        .map(([year, yearGroup]) => (
-          <div>
-            <span class="text-2xl font-bold">{year}</span>
-            <sup class="text-muted-foreground text-sm">{yearGroup.length}</sup>
-            {Object.entries(
-              getPostsByGroupCondition(
-                yearGroup,
-                post => post.data.pubDatetime.getMonth() + 1
-              )
-            )
-              .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
-              .map(([month, monthGroup]) => (
-                <div class="flex flex-col sm:flex-row">
-                  <div class="mt-6 min-w-36 text-lg sm:my-6">
-                    <span class="font-bold">
-                      {monthFormatter.format(
-                        new Date(2000, Number(month) - 1, 1)
-                      )}
-                    </span>
-                    <sup class="text-muted-foreground text-xs">
-                      {monthGroup.length}
-                    </sup>
-                  </div>
-                  <ul class="flex flex-col gap-8">
-                    {monthGroup
-                      .sort(
-                        (a, b) =>
-                          Math.floor(
-                            new Date(b.data.pubDatetime).getTime() / 1000
-                          ) -
-                          Math.floor(
-                            new Date(a.data.pubDatetime).getTime() / 1000
+          .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
+          .map(([year, yearGroup]) => (
+            <section class="year-group">
+              <div class="year-head">
+                <span class="year">{year}</span>
+                <sup class="year-count">{yearGroup.length}</sup>
+              </div>
+              <div class="month-groups">
+                {Object.entries(
+                  getPostsByGroupCondition(
+                    yearGroup,
+                    post => post.data.pubDatetime.getMonth() + 1
+                  )
+                )
+                  .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
+                  .map(([month, monthGroup]) => (
+                    <div class="month-group">
+                      <div class="month-head">
+                        <span class="month">
+                          {monthFormatter.format(
+                            new Date(2000, Number(month) - 1, 1)
+                          )}
+                        </span>
+                        <sup class="month-count">{monthGroup.length}</sup>
+                      </div>
+                      <ul class="post-list">
+                        {monthGroup
+                          .sort(
+                            (a, b) =>
+                              Math.floor(
+                                new Date(b.data.pubDatetime).getTime() / 1000
+                              ) -
+                              Math.floor(
+                                new Date(a.data.pubDatetime).getTime() / 1000
+                              )
                           )
-                      )
-                      .map(data => (
-                        <li>
-                          <Card post={data} />
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-              ))}
-          </div>
-        ))
-    }
+                          .map(data => (
+                            <li>
+                              <Card post={data} />
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  ))}
+              </div>
+            </section>
+          ))
+      }
+    </div>
   </Main>
 
   <Footer />
 </Layout>
+
+<style>
+  .archive-groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+  .year-group {
+    border-top: 2px solid var(--color-text-primary);
+    padding-top: var(--space-5);
+  }
+  .year-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+  .year {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: var(--text-section);
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+  }
+  .year-count {
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+  .month-groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin-top: var(--space-8);
+  }
+  .month-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .month-group:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+  .month-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+  .month {
+    font-family: var(--font-mono);
+    font-size: var(--text-kicker);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+  .month-count {
+    font-family: var(--font-sans);
+    font-size: var(--text-caption);
+    color: var(--color-text-muted);
+  }
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+</style>
