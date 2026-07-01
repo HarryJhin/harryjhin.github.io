@@ -1,11 +1,21 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { fontData, experimental_getFontFileURL } from "astro:assets";
 import satori from "satori";
 import sharp from "sharp";
-import { getFontPathByWeight } from "@/utils/getFontPathByWeight";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { getPostSlug } from "@/utils/getPostPaths";
 import config from "@/config";
+
+// Read the vendored otf directly instead of relying on import.meta.url:
+// Astro's build flattens this route into dist/.prerender/chunks/, which
+// breaks any path computed relative to the module's own bundled location.
+// astro build/check/dev all run from the project root, so cwd is stable.
+const ogFontURL = (name: string) =>
+  join(process.cwd(), "src/assets/fonts/pretendard/og", name);
+
+const regularData = readFileSync(ogFontURL("Pretendard-Regular.otf"));
+const boldData = readFileSync(ogFontURL("Pretendard-Bold.otf"));
 
 export async function getStaticPaths() {
   if (!config.features.dynamicOgImage) {
@@ -22,27 +32,10 @@ export async function getStaticPaths() {
   }));
 }
 
-export const GET: APIRoute = async ({ props, url }) => {
+export const GET: APIRoute = async ({ props }) => {
   if (!config.features.dynamicOgImage) {
     return new Response(null, { status: 404, statusText: "Not found" });
   }
-
-  const fonts = fontData["--font-google-sans-code"];
-  const regularFontPath = getFontPathByWeight(fonts, 400);
-  const boldFontPath = getFontPathByWeight(fonts, 700);
-
-  if (regularFontPath === undefined || boldFontPath === undefined) {
-    throw new Error("Cannot find the font path.");
-  }
-
-  const [regularData, boldData] = await Promise.all([
-    fetch(experimental_getFontFileURL(regularFontPath, url)).then(res =>
-      res.arrayBuffer()
-    ),
-    fetch(experimental_getFontFileURL(boldFontPath, url)).then(res =>
-      res.arrayBuffer()
-    ),
-  ]);
 
   const svg = await satori(
     {
@@ -172,18 +165,8 @@ export const GET: APIRoute = async ({ props, url }) => {
       height: 630,
       embedFont: true,
       fonts: [
-        {
-          name: "Google Sans Code",
-          data: regularData,
-          weight: 400,
-          style: "normal",
-        },
-        {
-          name: "Google Sans Code",
-          data: boldData,
-          weight: 700,
-          style: "normal",
-        },
+        { name: "Pretendard", data: regularData, weight: 400, style: "normal" },
+        { name: "Pretendard", data: boldData, weight: 700, style: "normal" },
       ],
     }
   );
