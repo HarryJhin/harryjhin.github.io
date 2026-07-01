@@ -55,6 +55,7 @@ const { items, title = "목차", class: cls } = Astro.props;
     line-height: 1.4;
     text-decoration: none;
     color: var(--color-text-secondary);
+    transition: color var(--duration-fast) var(--ease-standard);
   }
   .toc-list a:hover {
     color: var(--color-primary);
