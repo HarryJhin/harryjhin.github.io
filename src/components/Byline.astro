@@ -1,0 +1,77 @@
+---
+interface Props {
+  author?: string;
+  date?: string;
+  readTime?: string;
+  size?: "sm" | "md" | "lg";
+  avatarSrc?: string;
+  class?: string;
+}
+const { author, date, readTime, size = "md", avatarSrc, class: cls } = Astro.props;
+const showAvatar = size !== "sm";
+const dims = size === "lg" ? 32 : 24;
+const initials = (author ?? "")
+  .split(" ")
+  .map(w => w[0])
+  .filter(Boolean)
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+---
+
+<div class:list={["byline", cls]}>
+  {
+    showAvatar && (
+      <span class="avatar" style={`--dims:${dims}px;--fs:${Math.round(dims * 0.4)}px`}>
+        {avatarSrc ? <img src={avatarSrc} alt={author} /> : initials}
+      </span>
+    )
+  }
+  <span class="meta">
+    {author && <span class="author">{author}</span>}
+    {date && <span class="dim">{author ? " · " : ""}{date}</span>}
+    {readTime && <span class="dim"> · 읽기 {readTime}</span>}
+  </span>
+</div>
+
+<style>
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .avatar {
+    width: var(--dims);
+    height: var(--dims);
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-sans);
+    font-size: var(--fs);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .meta {
+    font-family: var(--font-sans);
+    font-size: var(--text-byline);
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+  .author {
+    color: var(--color-text-primary);
+    font-weight: var(--weight-medium);
+  }
+  .dim {
+    color: var(--color-text-muted);
+  }
+</style>
