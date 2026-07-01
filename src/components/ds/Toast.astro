@@ -1,0 +1,112 @@
+---
+interface Props {
+  variant?: "success" | "warning" | "error" | "info";
+  title?: string;
+  message?: string;
+  dismissible?: boolean;
+  class?: string;
+}
+const {
+  variant = "info",
+  title,
+  message,
+  dismissible = false,
+  class: cls,
+  ...attrs
+} = Astro.props;
+---
+
+<div role="status" class:list={["ds-toast", `variant-${variant}`, cls]} {...attrs}>
+  <span class="dot" aria-hidden="true" />
+  <div class="body">
+    {title && <p class="title">{title}</p>}
+    {message && <p class="message">{message}</p>}
+  </div>
+  {
+    dismissible && (
+      <button type="button" class="dismiss" aria-label="닫기">
+        <svg
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    )
+  }
+</div>
+
+<style>
+  .ds-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    width: 340px;
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    margin-top: 5px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+  }
+
+  .variant-success .dot {
+    background: var(--color-success);
+  }
+  .variant-warning .dot {
+    background: var(--color-warning);
+  }
+  .variant-error .dot {
+    background: var(--color-error);
+  }
+  .variant-info .dot {
+    background: var(--color-primary);
+  }
+
+  .body {
+    flex: 1;
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-primary);
+  }
+
+  .message {
+    margin: 2px 0 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    line-height: var(--leading-normal);
+    color: var(--color-text-secondary);
+  }
+
+  .dismiss {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+</style>

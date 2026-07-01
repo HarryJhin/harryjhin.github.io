@@ -1,0 +1,141 @@
+---
+interface Props {
+  open?: boolean;
+  title?: string;
+  description?: string;
+  width?: number;
+  class?: string;
+}
+const { open = false, title, description, width = 480, class: cls, ...attrs } = Astro.props;
+
+const hasBody = Astro.slots.has("default");
+const hasFooter = Astro.slots.has("footer");
+---
+
+{
+  open && (
+    <div class="ds-dialog-scrim">
+      <div
+        role="dialog"
+        aria-modal="true"
+        class:list={["ds-dialog", cls]}
+        style={`--dialog-width: ${width}px`}
+        {...attrs}
+      >
+        <div class="content">
+          <div class="header">
+            {title && <h2 class="title">{title}</h2>}
+            <button type="button" class="close" aria-label="닫기">
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+          {description && <p class="description">{description}</p>}
+          {
+            hasBody && (
+              <div class="body">
+                <slot />
+              </div>
+            )
+          }
+        </div>
+        {
+          hasFooter && (
+            <div class="footer">
+              <slot name="footer" />
+            </div>
+          )
+        }
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .ds-dialog-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    background: rgba(10, 10, 10, 0.4); /* DS literal — dialog scrim */
+    backdrop-filter: blur(2px);
+  }
+
+  .ds-dialog {
+    width: 100%;
+    max-width: var(--dialog-width);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .content {
+    padding: var(--space-6);
+  }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-subhead);
+    letter-spacing: var(--tracking-heading);
+    color: var(--color-text-primary);
+  }
+
+  .close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  .description {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-text-secondary);
+  }
+
+  .body {
+    margin-top: var(--space-5);
+  }
+
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--color-border);
+    background: var(--background);
+  }
+</style>
