@@ -19,7 +19,7 @@ const normalized: Tab[] = tabs.map((tab) => (typeof tab === "string" ? { value: 
     normalized.map((tab) => {
       const active = tab.value === value;
       return (
-        <button type="button" class:list={["ds-tab", active && "active"]} aria-selected={active}>
+        <button type="button" class:list={["ds-tab", active && "active"]}>
           {tab.label}
           {tab.count !== undefined && <span class="count">{tab.count}</span>}
           <span class="underline" aria-hidden="true" />
