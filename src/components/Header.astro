@@ -146,6 +146,7 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
             <a
               href={getRelativeLocaleUrl(locale, "posts")}
               class:list={["nav-link", { active: isActive("/posts") }]}
+              aria-current={isActive("/posts") ? "page" : undefined}
             >
               {t.nav.posts}
             </a>
@@ -154,6 +155,7 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
             <a
               href={getRelativeLocaleUrl(locale, "tags")}
               class:list={["nav-link", { active: isActive("/tags") }]}
+              aria-current={isActive("/tags") ? "page" : undefined}
             >
               {t.nav.tags}
             </a>
@@ -162,6 +164,7 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
             <a
               href={getRelativeLocaleUrl(locale, "series")}
               class:list={["nav-link", { active: isActive("/series") }]}
+              aria-current={isActive("/series") ? "page" : undefined}
             >
               {t.nav.series}
             </a>
@@ -170,6 +173,7 @@ const sectionKicker = config.sections.map(s => s.label.toUpperCase()).join(" · 
             <a
               href={getRelativeLocaleUrl(locale, "about")}
               class:list={["nav-link", { active: isActive("/about") }]}
+              aria-current={isActive("/about") ? "page" : undefined}
             >
               {t.nav.about}
             </a>
