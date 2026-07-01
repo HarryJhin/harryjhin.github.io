@@ -1,0 +1,85 @@
+---
+interface Props {
+  variant?: "ghost" | "secondary";
+  size?: "sm" | "md" | "lg";
+  disabled?: boolean;
+  label: string;
+  class?: string;
+}
+const {
+  variant = "ghost",
+  size = "md",
+  disabled = false,
+  label,
+  class: cls,
+  ...attrs
+} = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={["ds-icon-button", `variant-${variant}`, `size-${size}`, cls]}
+  disabled={disabled}
+  title={label}
+  aria-label={label}
+  {...attrs}
+>
+  <span class="icon" aria-hidden="true">
+    <slot />
+  </span>
+</button>
+
+<style>
+  .ds-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background var(--duration-base) var(--ease-standard);
+  }
+
+  .size-sm {
+    width: 32px;
+    height: 32px;
+  }
+  .size-md {
+    width: 38px;
+    height: 38px;
+  }
+  .size-lg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .variant-ghost {
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .variant-ghost:not(:disabled):hover {
+    background: var(--color-bg-alt);
+  }
+
+  .variant-secondary {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+  .variant-secondary:not(:disabled):hover {
+    background: var(--color-bg-alt);
+  }
+
+  .ds-icon-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+</style>

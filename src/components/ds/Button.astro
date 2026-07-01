@@ -1,0 +1,135 @@
+---
+interface Props {
+  variant?: "primary" | "secondary" | "ghost" | "destructive";
+  size?: "sm" | "md" | "lg";
+  disabled?: boolean;
+  class?: string;
+}
+const {
+  variant = "primary",
+  size = "md",
+  disabled = false,
+  class: cls,
+  ...attrs
+} = Astro.props;
+
+const hasIcon = Astro.slots.has("icon");
+const hasIconRight = Astro.slots.has("iconRight");
+---
+
+<button
+  type="button"
+  class:list={["ds-button", `variant-${variant}`, `size-${size}`, cls]}
+  disabled={disabled}
+  {...attrs}
+>
+  {
+    hasIcon && (
+      <span class="icon" aria-hidden="true">
+        <slot name="icon" />
+      </span>
+    )
+  }
+  <slot />
+  {
+    hasIconRight && (
+      <span class="icon" aria-hidden="true">
+        <slot name="iconRight" />
+      </span>
+    )
+  }
+</button>
+
+<style>
+  .ds-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    line-height: 1;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+      transform var(--duration-base) var(--ease-standard),
+      background var(--duration-base) var(--ease-standard),
+      box-shadow var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard);
+  }
+
+  .size-sm {
+    height: 32px;
+    padding: 0 12px;
+    font-size: var(--text-body-sm);
+  }
+  .size-md {
+    height: 38px;
+    padding: 0 16px;
+    font-size: var(--text-body-sm);
+  }
+  .size-lg {
+    height: 44px;
+    padding: 0 24px;
+    font-size: var(--text-body-md);
+  }
+
+  .ds-button:not(:disabled):hover {
+    transform: translateY(var(--lift-button));
+  }
+  .ds-button:not(:disabled):active {
+    transform: translateY(0);
+  }
+
+  .variant-primary {
+    background: var(--color-primary);
+    color: #fff; /* DS literal — white text on primary fill */
+  }
+  .variant-primary:not(:disabled):hover {
+    background: var(--color-primary-hover);
+    box-shadow: var(--shadow-primary-glow);
+  }
+
+  .variant-secondary {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+  }
+  .variant-secondary:not(:disabled):hover {
+    background: var(--color-bg-alt);
+  }
+
+  .variant-ghost {
+    background: transparent;
+    color: var(--color-text-primary);
+  }
+  .variant-ghost:not(:disabled):hover {
+    background: var(--color-bg-alt);
+  }
+
+  .variant-destructive {
+    background: transparent;
+    color: var(--color-error);
+    border-color: var(--color-error);
+  }
+  .variant-destructive:not(:disabled):hover {
+    background: var(--color-error-soft);
+  }
+
+  .ds-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+</style>
