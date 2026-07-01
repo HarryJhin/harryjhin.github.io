@@ -1,0 +1,115 @@
+---
+interface Props {
+  name: string;
+  role?: string;
+  bio?: string;
+  avatarSrc?: string;
+  links?: { label: string; href: string }[];
+  class?: string;
+}
+const { name, role, bio, avatarSrc, links, class: cls } = Astro.props;
+const initials = name
+  .split(" ")
+  .map(w => w[0])
+  .filter(Boolean)
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+---
+
+<div class:list={["author-card", cls]}>
+  <span class="avatar">
+    {avatarSrc ? <img src={avatarSrc} alt={name} /> : initials}
+  </span>
+  <div class="body">
+    <div class="heading">
+      <span class="name">{name}</span>
+      {role && <span class="role">{role}</span>}
+    </div>
+    {bio && <p class="bio">{bio}</p>}
+    {
+      links && links.length > 0 && (
+        <div class="links">
+          {links.map(link => (
+            <a href={link.href} target="_blank" rel="noopener noreferrer">
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .author-card {
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .avatar {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: var(--weight-semibold);
+    font-size: 20px;
+    color: var(--color-text-secondary);
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .body {
+    min-width: 0;
+  }
+  .heading {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .name {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: var(--text-subhead);
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+  }
+  .role {
+    font-family: var(--font-sans);
+    font-size: var(--text-caption);
+    color: var(--color-text-muted);
+  }
+  .bio {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-read-sm);
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+  }
+  .links {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .links a {
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+</style>
