@@ -1,0 +1,107 @@
+---
+interface Props {
+  placeholder?: string;
+  shortcut?: string;
+  editable?: boolean;
+  value?: string;
+  class?: string;
+}
+const {
+  placeholder = "검색…",
+  shortcut = "⌘K",
+  editable = false,
+  value,
+  class: cls,
+  ...attrs
+} = Astro.props;
+---
+
+<div class:list={["ds-search-bar", editable && "editable"]} {...attrs}>
+  <span class="icon" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="11" cy="11" r="8" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  </span>
+  {
+    editable ? (
+      <input type="text" class:list={["body", cls]} value={value} placeholder={placeholder} />
+    ) : (
+      <span class:list={["body", cls]}>{placeholder}</span>
+    )
+  }
+  {shortcut && <kbd class="shortcut">{shortcut}</kbd>}
+</div>
+
+<style>
+  .ds-search-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-search-bar.editable {
+    cursor: text;
+  }
+
+  .ds-search-bar:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: var(--focus-ring);
+  }
+
+  .icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--color-text-muted);
+  }
+
+  span.body {
+    flex: 1;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    color: var(--color-text-muted);
+  }
+
+  input.body {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    color: var(--color-text-primary);
+  }
+
+  .shortcut {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 7px;
+    flex-shrink: 0;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--color-text-secondary);
+  }
+</style>

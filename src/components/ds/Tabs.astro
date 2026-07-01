@@ -1,0 +1,82 @@
+---
+interface Tab {
+  value: string;
+  label: string;
+  count?: number;
+}
+interface Props {
+  tabs: (string | Tab)[];
+  value?: string;
+  class?: string;
+}
+const { tabs, value, class: cls, ...attrs } = Astro.props;
+
+const normalized: Tab[] = tabs.map((tab) => (typeof tab === "string" ? { value: tab, label: tab } : tab));
+---
+
+<div class:list={["ds-tabs", cls]} {...attrs}>
+  {
+    normalized.map((tab) => {
+      const active = tab.value === value;
+      return (
+        <button type="button" class:list={["ds-tab", active && "active"]} aria-selected={active}>
+          {tab.label}
+          {tab.count !== undefined && <span class="count">{tab.count}</span>}
+          <span class="underline" aria-hidden="true" />
+        </button>
+      );
+    })
+  }
+</div>
+
+<style>
+  .ds-tabs {
+    display: flex;
+    gap: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .ds-tab {
+    position: relative;
+    padding: 12px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-tab:hover {
+    color: var(--color-text-primary);
+  }
+
+  .ds-tab.active,
+  .ds-tab.active:hover {
+    color: var(--color-primary);
+  }
+
+  .count {
+    margin-left: 6px;
+    font-size: var(--text-caption);
+    color: var(--color-text-muted);
+  }
+
+  .underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-tab.active .underline {
+    opacity: 1;
+  }
+</style>
