@@ -48,6 +48,7 @@ export default defineAstroPaperConfig({
     { id: "kotlin", label: "kotlin" },
     { id: "jvm", label: "jvm" },
     { id: "cloud-native", label: "cloud-native" },
+    { id: "web", label: "web" },
   ],
   series: [
     {
