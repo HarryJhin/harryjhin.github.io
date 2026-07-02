@@ -13,6 +13,7 @@ tags:
   - linkerd
   - cilium
   - service-mesh
+  - cloud-native
 description: 마이크로서비스마다 Resilience4j로 재시도·회로 차단·mTLS를 박는 건 같은 코드를 N번 쓰는 일이다. 서비스 메시는 이걸 앱 밖 프록시로 내린다. Istio(Envoy·ambient), Linkerd(Rust 프록시), Cilium(eBPF)을 JVM 파드의 사이드카 오버헤드 관점에서 가른다.
 faq:
   - question: "서비스 메시가 뭐고 왜 필요한가?"
