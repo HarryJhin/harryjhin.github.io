@@ -96,7 +96,7 @@ logging:
 콘솔용은 `logging.structured.format.console`, 파일용은 `logging.structured.format.file`에 포맷 id를 준다. 우리는 stdout으로 흘려보낼 거니 `console`만 켜면 된다. 이 한 줄로 그동안 익숙하던 텍스트 로그가 한 줄에 JSON 객체 하나씩 찍히는 형태로 바뀐다. 개념적으로는 이런 모양이다(필드 이름은 고른 포맷에 따라 다르다).
 
 ```json
-{"@timestamp":"2026-06-03T00:00:00Z","log.level":"ERROR","message":"payment failed","logger":"com.example.PaymentService"}
+{"@timestamp":"2026-06-03T00:00:00Z","log.level":"ERROR","message":"payment failed","log.logger":"com.example.PaymentService","ecs.version":"8.11"}
 ```
 
 코드는 안 바꾼다. `log.error("payment failed")`는 그대로 두고, 출력 형식만 프레임워크가 JSON으로 만든다. 로컬에서 개발할 땐 사람이 읽는 텍스트로, 배포 프로파일에선 JSON으로. 프로파일별로 이 속성만 갈아끼우면 된다.
