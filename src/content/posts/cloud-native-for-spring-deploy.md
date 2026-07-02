@@ -225,7 +225,7 @@ startupProbe:
 
 ## 떴다. 그런데 OOMKilled로 죽는다
 
-이미지를 굽고, Helm으로 말고, 파드로 띄웠다. 메모리는 넉넉하게 1Gi를 줬다. `-Xmx`는 안 박았으니 JVM이 알아서 하겠거니 했다. 그런데 부하가 좀 붙으니 파드가 죽는다.
+이미지를 굽고, Helm으로 묶고, 파드로 띄웠다. 메모리는 넉넉하게 1Gi를 줬다. `-Xmx`는 안 박았으니 JVM이 알아서 하겠거니 했다. 그런데 부하가 좀 붙으니 파드가 죽는다.
 
 ```text
 NAME                     READY   STATUS      RESTARTS   AGE
