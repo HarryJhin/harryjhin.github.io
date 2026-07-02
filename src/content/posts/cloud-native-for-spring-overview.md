@@ -17,13 +17,13 @@ tags:
 description: Spring 앱을 클라우드로 옮기는 순간 Kubernetes, Prometheus, OpenTelemetry, Istio 같은 낯선 이름이 한꺼번에 쏟아진다. 이 이름들이 왜 생겼고, 왜 CNCF라는 한 재단에 모였고, 내가 이미 아는 Spring(로깅·설정·패키징·MSA)과 어떻게 이어지는지 지도를 그린다.
 faq:
   - question: "Spring 개발자가 클라우드 네이티브를 왜 알아야 하나?"
-    answer: "배포 대상이 서버 한 대에서 Kubernetes 클러스터로 바뀌면 헬스체크, 메모리 한계, 로그 수집, 서비스 간 통신이 전부 인프라 층의 문제로 옮겨가기 때문이다. 2025 CNCF 설문에서 컨테이너 사용자의 82%가 프로덕션에서 Kubernetes를 쓴다고 답했고, Spring 앱도 그 위에 올라간다."
+    answer: "배포 대상이 서버 한 대에서 Kubernetes 클러스터로 바뀌면 헬스체크, 메모리 한계, 로그 수집, 서비스 간 통신이 전부 인프라 층의 문제로 옮겨가기 때문이다. 프로세스 생존과 요청 처리 준비는 다른 문제가 되고, 로그는 파드 수만큼 흩어져 모아서 검색할 도구가 따로 필요해진다. 2025 CNCF 설문에서 컨테이너 사용자의 82%가 프로덕션에서 Kubernetes를 쓴다고 답했고, Spring 앱도 결국 그 위에 올라간다."
   - question: "CNCF가 뭐고 Spring과 무슨 상관인가?"
-    answer: "CNCF(Cloud Native Computing Foundation)는 Linux Foundation 산하의 벤더 중립 오픈소스 재단으로, Kubernetes·Prometheus·Envoy 같은 클라우드 인프라 프로젝트를 호스팅한다. Spring 앱을 클라우드에 올리면 이 프로젝트들이 배포·관측·통신의 실무 표준이 되므로, Spring 개발자가 만나는 도구 대부분이 결국 이 재단에 모여 있다."
+    answer: "CNCF(Cloud Native Computing Foundation)는 Linux Foundation 산하의 벤더 중립 오픈소스 재단으로, Kubernetes·Prometheus·Envoy 같은 클라우드 인프라 프로젝트를 호스팅한다. 벤더 중립이라 특정 회사가 마음대로 바꿀 수 없고, 그래서 어느 클라우드를 쓰든 배포는 Kubernetes고 메트릭은 Prometheus라는 실무 표준이 자리 잡았다. Spring 앱을 클라우드에 올리면 이 프로젝트들이 배포·관측·통신의 표준이 되므로, Spring 개발자가 만나는 도구 대부분이 결국 이 재단에 모여 있다."
   - question: "2026년 클라우드 표준 중 Spring 개발자에게 실제 닿는 건?"
-    answer: "Kubernetes(배포), Helm(패키징), Prometheus·OpenTelemetry(관측), Istio·Linkerd(서비스 메시), KEDA·Knative(스케일링)가 핵심이다. CNCF Graduated 프로젝트 36개 전부가 아니라, Spring Boot 컨테이너가 프로덕션까지 가는 경로에 놓인 한 줌이다. Spring Boot 3의 Observability는 OpenTelemetry에 직접 물린다."
+    answer: "Kubernetes(배포), Helm(패키징), Prometheus·OpenTelemetry(관측), Istio·Linkerd(서비스 메시), KEDA·Knative(스케일링)가 핵심이다. 이 다섯은 앱을 올리고, 상태를 보고, 트래픽을 지키고, 부하에 대응하는 순서로 이 시리즈가 그대로 다룰 도구들이다. CNCF Graduated 프로젝트 36개 전부가 아니라, Spring Boot 컨테이너가 프로덕션까지 가는 경로에 놓인 한 줌이다. Spring Boot 3의 Observability는 이 중 OpenTelemetry 규격에 직접 물린다."
   - question: "LGTM 스택은 CNCF 프로젝트인가?"
-    answer: "아니다. LGTM(Loki·Grafana·Tempo·Mimir)은 Grafana Labs가 만든 관측성 스택이라 CNCF가 호스팅하지 않는다. 다만 CNCF 표준인 Prometheus와 OpenTelemetry가 내보내는 데이터를 받아 저장하고 시각화하도록 설계돼 있어, 실무에서는 CNCF 프로젝트와 짝을 이뤄 쓴다."
+    answer: "아니다. LGTM(Loki·Grafana·Tempo·Mimir)은 Grafana Labs가 만든 관측성 스택이라 CNCF가 호스팅하지 않는다. 반면 이 스택이 실어 나르는 데이터를 만들어내는 Prometheus는 Kubernetes, Envoy와 나란히 CNCF에서 자란 프로젝트다. 다만 CNCF 표준인 Prometheus와 OpenTelemetry가 내보내는 데이터를 LGTM이 받아 저장하고 시각화하도록 설계돼 있어, 실무에서는 CNCF 프로젝트와 짝을 이뤄 쓴다."
 ---
 
 사내 인프라가 Kubernetes로 넘어간다는 공지를 처음 받았을 때, 나는 내 Spring Boot 코드는 그대로일 거라고 생각했다. `jar` 하나 잘 말아서 넘기면 나머지는 플랫폼 팀이 알아서 하겠지. 착각이었다.
@@ -54,7 +54,7 @@ CNCF(Cloud Native Computing Foundation)는 Linux Foundation 산하의 벤더 중
 
 다행인 건, 이 낯선 이름들이 완전히 새 개념을 요구하지 않는다는 점이다. 대부분 내가 Spring에서 이미 하던 일이 인프라 층으로 자리를 옮긴 것에 가깝다.
 
-로깅부터 그렇다. Logback으로 파일에 남기던 로그는, 클러스터에선 표준 출력으로 뱉고 수집기가 모아 검색 가능한 저장소에 쌓는다. 하던 일은 같고 목적지만 바뀐다. 설정도 그렇다. `application.yml` 과 프로파일로 환경을 가르던 걸, ConfigMap과 Secret이라는 클러스터 리소스가 이어받는다. 패키징은 `bootJar` 로 실행 가능한 jar를 만들던 흐름이 컨테이너 이미지를 굽는 단계로 한 겹 확장된다. 마이크로서비스도 마찬가지다. Spring Cloud로 서비스 디스커버리와 회로 차단기를 코드에 박던 일의 상당 부분을, 서비스 메시가 사이드카에서 대신 처리한다.
+로깅부터 그렇다. Logback으로 파일에 남기던 로그는, 클러스터에선 표준 출력으로 뱉고 수집기가 모아 검색 가능한 저장소에 쌓는다. 하던 일은 같고 목적지만 바뀐다. 설정도 그렇다. `application.yml`과 프로파일로 환경을 가르던 걸, ConfigMap과 Secret이라는 클러스터 리소스가 이어받는다. 패키징은 `bootJar`로 실행 가능한 jar를 만들던 흐름이 컨테이너 이미지를 굽는 단계로 한 겹 확장된다. 마이크로서비스도 마찬가지다. Spring Cloud로 서비스 디스커버리와 회로 차단기를 코드에 박던 일의 상당 부분을, 서비스 메시가 사이드카에서 대신 처리한다.
 
 관측성은 가장 깔끔하게 이어지는 지점이다. Spring Boot 3의 Observability는 OpenTelemetry 규격에 직접 물리도록 설계돼 있어서, Micrometer가 노출한 메트릭을 Prometheus가 긁어가고 트레이스는 OTLP로 흘려보낸다. 내가 새로 배우는 게 아니라, Actuator에서 이미 켜던 스위치가 클러스터 밖의 표준과 맞물리는 것이다.
 
