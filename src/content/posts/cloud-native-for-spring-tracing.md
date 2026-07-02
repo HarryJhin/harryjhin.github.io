@@ -44,7 +44,7 @@ faq:
 
 Spring 진영에서 이 문제에 먼저 손을 댄 건 2016년 Spring Cloud 팀이 만든 Spring Cloud Sleuth였다. 이후 Spring 팀은 트레이싱 기능을 Spring Cloud에서 떼어내 별도 프로젝트로 옮겼는데, 그게 Micrometer Tracing이다. Micrometer 공식 문서는 이 프로젝트를 "Spring에 종속되지 않는, 사실상 Spring Cloud Sleuth의 사본"이라고 설명한다. 1.0.0 GA는 2022년 11월이었다.
 
-Micrometer Tracing이 하는 일은 두 가지다. 첫째, 인기 있는 여러 트레이서 라이브러리를 감싸는 파사드를 제공해서 벤더 락인 없이 계측 코드를 짤 수 있게 한다. 둘째, 4편에서 만난 Observation API를 확장한다. `ObservationHandler`에 트레이싱 확장을 붙여서, `Observation` 하나가 쓰일 때마다 대응하는 스팬을 만들고 시작하고 멈추고 보고한다. 4편에서 "한 번 계측하면 메트릭과 트레이스가 같이 나온다"고 했던 그 연결이 정확히 여기서 일어난다.
+Micrometer Tracing이 하는 일은 두 가지다. 첫째, 인기 있는 여러 트레이서 라이브러리를 감싸는 파사드를 제공해서 벤더 락인 없이 계측 코드를 짤 수 있게 한다. 둘째, Micrometer의 Observation API를 확장한다. `ObservationHandler`에 트레이싱 확장을 붙여서, `Observation` 하나가 쓰일 때마다 대응하는 스팬을 만들고 시작하고 멈추고 보고한다. 4편에서 쓴 Micrometer는 메트릭 레지스트리였다. Observation API는 그 위에 놓여서, 계측을 한 번만 하면 메트릭과 스팬이 같이 나오게 하는 상위 API다.
 
 실제 트레이서 구현으로 연결하려면 브리지 의존성이 필요하다. `micrometer-tracing-bridge-brave`는 Zipkin으로, `micrometer-tracing-bridge-otel`은 OpenTelemetry SDK로 잇는다. Spring Boot Actuator는 이 Micrometer Tracing에 대한 의존성 관리와 자동 구성을 제공한다. `management.tracing.sampling.probability` 하나로 샘플링 비율을 조절하는 것도, 기본 10%인 이 값을 로컬 개발 중엔 100%로 올리는 것도 Actuator가 이미 깔아둔 자리다.
 
@@ -52,7 +52,7 @@ Micrometer Tracing이 하는 일은 두 가지다. 첫째, 인기 있는 여러 
 
 스팬은 트레이스를 이루는 최소 단위다. 요청 하나가 주문, 결제, 재고 세 서비스를 거치면 트레이스 하나 안에 스팬이 최소 셋 생기고, 각 스팬이 시작 시각·종료 시각·태그를 들고 서로 부모-자식 관계로 엮인다. 그 트리를 펼치면 요청이 어디서 얼마나 머물렀는지가 그대로 그림이 된다.
 
-Spring에서 스팬을 직접 만드는 방법은 4편에서 본 코드와 똑같다. `ObservationRegistry`를 주입받아 `Observation`을 시작하면, Micrometer Tracing이 그 관측 구간을 스팬으로 잡는다.
+Spring에서 스팬을 직접 만드는 방법은 방금 본 Observation API 그대로다. `ObservationRegistry`를 주입받아 `Observation`을 시작하면, Micrometer Tracing이 그 관측 구간을 스팬으로 잡는다.
 
 ```java file="OrderService.java"
 private final ObservationRegistry registry;
@@ -64,7 +64,7 @@ public Order place(OrderRequest req) {
 }
 ```
 
-새 코드가 아니다. 4편에서 메트릭을 뽑던 그 계측이 트레이싱 브리지만 붙이면 스팬도 같이 뽑는다. 계측은 한 번, 신호는 둘이라던 그 약속이 트레이스 쪽에서도 지켜진다.
+낯선 코드가 아니다. 위에서 본 Observation 그대로이고, 여기에 트레이싱 브리지만 붙이면 스팬도 같이 나온다. 계측은 한 번, 신호는 둘이라던 위의 그 얘기가 코드로 확인되는 지점이다.
 
 ## OTel: 그 위에 놓인 표준
 
